@@ -16,10 +16,14 @@ public class Account implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private String id;
+    private Client client;
     private String number;
     private String agency;
-    private String cpf;
     private Boolean status;
+    private AccountType accountType;
+    private double limit;
+    private double balance;
+
     @CreatedDate
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy HH:mm:ss")
     private LocalDateTime dtCreation;
