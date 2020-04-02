@@ -7,6 +7,7 @@
 - Felipe Wurth (felipewurch@gmail.com - felipewurch)
 - Crislaine Soares ( Crislainesoares)
 - Leo Miranda ( leomiranda1995@gmail.com - leomiranda1995)
+- Matheus Abreu ( matheus.la1999@gmail.com - matheussla)
 
 ##Funcionalidades
 - Extrato (do dia, ou por período)
