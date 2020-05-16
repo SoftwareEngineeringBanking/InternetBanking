@@ -1,14 +1,10 @@
 package br.com.xurebinhaBanking.account.data.model;
 
-import br.com.xurebinhaBanking.auditable.AuditableEntity;
 import lombok.Data;
-import org.springframework.data.mongodb.core.mapping.Document;
-
-import java.io.Serializable;
 
 @Data
-@Document(collection = "account")
-public class Account extends AuditableEntity {
+
+public class Account{
 
     private String id;
     private Client client;

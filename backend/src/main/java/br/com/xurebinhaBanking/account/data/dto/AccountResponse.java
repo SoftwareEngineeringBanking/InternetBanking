@@ -1,10 +1,10 @@
 package br.com.xurebinhaBanking.account.data.dto;
 
-import br.com.xurebinhaBanking.auditable.AuditableEntity;
+
 import lombok.Data;
 
 @Data
-public class AccountResponse extends AuditableEntity {
+public class AccountResponse {
 
     private String number;
     private String agency;
