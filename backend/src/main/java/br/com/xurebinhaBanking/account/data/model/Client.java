@@ -1,4 +1,4 @@
-package br.com.xurebinhaBanking.data.model;
+package br.com.xurebinhaBanking.account.data.model;
 
 import lombok.Data;
 

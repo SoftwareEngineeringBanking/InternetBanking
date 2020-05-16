@@ -30,3 +30,7 @@ hs_err_pid*
 .idea/
 gradle/
 build/*
+
+# IDE
+.vscode/*
+.idea/*
