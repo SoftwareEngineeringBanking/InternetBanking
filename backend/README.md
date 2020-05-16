@@ -2,11 +2,11 @@
 
 ## Integrantes do grupo
 
-- Alexandre (alexandre221@gmail.com - alexandre-malabarba)
-- Felipe Macedo (felipe.x.macedo@gmail.com - xmacedo)
-- Felipe Wurth (felipewurch@gmail.com - felipewurch)
+- Alexandre (alexandre221@gmail.com - github.com/alexandre-malabarba)
+- Felipe Macedo (felipe.x.macedo@gmail.com - github.com/xmacedo)
+- Felipe Wurth (felipewurch@gmail.com - github.com/felipewurch)
 - Crislaine Soares ( Crislainesoares)
-- Leo Miranda ( leomiranda1995@gmail.com - leomiranda1995)
+- Leo Miranda ( leomiranda1995@gmail.com - github.com/leomiranda1995)
 - Matheus Abreu ( matheus.la1999@gmail.com - matheussla)
 
 ##Funcionalidades
