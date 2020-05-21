@@ -2,6 +2,7 @@ package br.com.xurebinhaBanking;
 
 import br.com.xurebinhaBanking.account.AccessAccount;
 import br.com.xurebinhaBanking.account.CreateAccount;
+import br.com.xurebinhaBanking.config.CreateTables;
 import br.com.xurebinhaBanking.config.H2JDBCUtils;
 
 import java.sql.Connection;
@@ -10,13 +11,14 @@ import java.util.Scanner;
 
 public class XurebinhaBankingApplication {
     private static String NOVA_LINHA = "\n";
-    private static Connection conn;
+    private static H2JDBCUtils conn;
 
     public static void main(String[] args) throws SQLException {
 
         CreateAccount createAccount = new CreateAccount();
         AccessAccount accessAccount = new AccessAccount();
         conn = iniciaConexao();
+        inicializaTabelas();
 
         boolean fimSistema = false;
 
@@ -30,7 +32,7 @@ public class XurebinhaBankingApplication {
                 case 1:
                     System.out.println("Criar Conta" + NOVA_LINHA);
 
-                    System.out.println(createAccount.create());
+                    System.out.println(createAccount.create(conn));
                     break;
                 case 2:
                     accessAccount.actionAccount();
@@ -43,6 +45,8 @@ public class XurebinhaBankingApplication {
 
         } while (!fimSistema);
 
+        conn.fecharConexao();
+
     }
 
     private static String imprimeMenu() {
@@ -51,8 +55,12 @@ public class XurebinhaBankingApplication {
                 "0 - Sair sistema" + NOVA_LINHA;
     }
 
-    private static Connection iniciaConexao() {
-        return H2JDBCUtils.getConnection();
+    private static H2JDBCUtils iniciaConexao() {
+        return new H2JDBCUtils();
+    }
+
+    private static void inicializaTabelas() {
+        new CreateTables(conn);
     }
 
 }
