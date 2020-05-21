@@ -1,18 +1,24 @@
 package br.com.xurebinhaBanking;
 
-import br.com.xurebinhaBanking.account.*;
+import br.com.xurebinhaBanking.account.AccessAccount;
+import br.com.xurebinhaBanking.account.CreateAccount;
+import br.com.xurebinhaBanking.config.H2JDBCUtils;
 
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.Scanner;
 
 public class XurebinhaBankingApplication {
     private static String NOVA_LINHA = "\n";
+    private static Connection conn;
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws SQLException {
 
         CreateAccount createAccount = new CreateAccount();
         AccessAccount accessAccount = new AccessAccount();
+        conn = iniciaConexao();
 
-        boolean fimSistema = true;
+        boolean fimSistema = false;
 
         do {
             System.out.println(imprimeMenu());
@@ -20,9 +26,9 @@ public class XurebinhaBankingApplication {
             System.out.println("Digite aqui:");
             int opcao = in.nextInt();
 
-            switch (opcao){
+            switch (opcao) {
                 case 1:
-                    System.out.println("Criar Conta"+NOVA_LINHA);
+                    System.out.println("Criar Conta" + NOVA_LINHA);
 
                     System.out.println(createAccount.create());
                     break;
@@ -31,18 +37,22 @@ public class XurebinhaBankingApplication {
                     break;
                 case 0:
                 default:
-                    System.out.println("Opcao 0"+NOVA_LINHA);
-                    fimSistema =false;
+                    System.out.println("Opcao 0" + NOVA_LINHA);
+                    fimSistema = true;
             }
 
-        } while (fimSistema);
+        } while (!fimSistema);
 
     }
 
     private static String imprimeMenu() {
-        return "1 - Criar Conta" +NOVA_LINHA+
-                "2 - Acessar Conta" +NOVA_LINHA+
-                "0 - Sair sistema"+NOVA_LINHA;
+        return "1 - Criar Conta" + NOVA_LINHA +
+                "2 - Acessar Conta" + NOVA_LINHA +
+                "0 - Sair sistema" + NOVA_LINHA;
+    }
+
+    private static Connection iniciaConexao() {
+        return H2JDBCUtils.getConnection();
     }
 
 }
