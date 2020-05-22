@@ -31,6 +31,6 @@ public class CreateAccount {
 
     private void createAccountInDb(Account acc, H2JDBCUtils conn){
         String sql = "INSERT INTO account (login, senha, nome, cpf) " + "VALUES ('"+acc.getLogin()+"','"+acc.getPassword()+"','"+acc.getName()+"','"+acc.getCpf()+"')";
-        conn.criarTabela(sql);
+        conn.inserirRegistro(sql);
     }
 }

@@ -2,10 +2,9 @@ package br.com.xurebinhaBanking;
 
 import br.com.xurebinhaBanking.account.AccessAccount;
 import br.com.xurebinhaBanking.account.CreateAccount;
-import br.com.xurebinhaBanking.config.CreateTables;
+import br.com.xurebinhaBanking.config.CreateTablesAndDefaultRegisters;
 import br.com.xurebinhaBanking.config.H2JDBCUtils;
 
-import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Scanner;
 
@@ -60,7 +59,7 @@ public class XurebinhaBankingApplication {
     }
 
     private static void inicializaTabelas() {
-        new CreateTables(conn);
+        new CreateTablesAndDefaultRegisters(conn);
     }
 
 }
