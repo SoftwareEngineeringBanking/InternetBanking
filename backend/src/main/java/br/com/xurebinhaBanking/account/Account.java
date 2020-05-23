@@ -9,7 +9,7 @@ public class Account {
     private double balance;
     //private Bank bank;
     private BigDecimal limitAccount;
-    //private StatusAccount statusAccount;
+    private StatusAccount statusAccount;
 
     public int getAgency(){
         return agency;

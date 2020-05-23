@@ -3,7 +3,7 @@ package br.com.xurebinhaBanking.bank;
 public class Bank {
     private int cod;
     private String name;
-    //private BankType bankType;
+    private BankType bankType;
 
     public int getCod(){
         return cod;
