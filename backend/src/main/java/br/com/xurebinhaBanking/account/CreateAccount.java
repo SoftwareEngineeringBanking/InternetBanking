@@ -1,36 +1,37 @@
 package br.com.xurebinhaBanking.account;
 
+import br.com.xurebinhaBanking.client.Client;
 import br.com.xurebinhaBanking.config.H2JDBCUtils;
 
-import java.sql.Connection;
 import java.util.Scanner;
 
 public class CreateAccount {
 
     Scanner in = new Scanner(System.in);
 
-    Account account = new Account();
+    Client client = new Client();
 
     public String create(H2JDBCUtils conn) {
-        System.out.println("Digite seu Login:");
-        account.setLogin(in.next());
+        System.out.println("Digite seu nome:");
+        client.setName(in.next());
 
-        System.out.println("Digite sua Senha:");
-        account.setPassword(in.next());
+        System.out.println("Digite seu CPF:");
+        client.setCpf(in.next());
 
-        System.out.println("Digite seu Nome:");
-        account.setName(in.next());
+        System.out.println("Digite sua senha:");
+        client.setPassword(in.next());
 
-        System.out.println("Digite seu Cpf:");
-        account.setCpf(in.next());
+        System.out.println("Digite sua segunda senha:");
+        client.setSecondPassword(in.next());
 
-        createAccountInDb(account, conn);
+        createAccountInDb(client, conn);
 
-       return  ("Bem vindo! "+account.getName());
+       return  ("Bem vindo! "+client.getName());
     }
 
-    private void createAccountInDb(Account acc, H2JDBCUtils conn){
-        String sql = "INSERT INTO account (login, senha, nome, cpf) " + "VALUES ('"+acc.getLogin()+"','"+acc.getPassword()+"','"+acc.getName()+"','"+acc.getCpf()+"')";
+    private void createAccountInDb(Client acc, H2JDBCUtils conn){
+        System.out.println(acc.getName());
+        String sql = "INSERT INTO client (name, cpf, password, second_password) " + "VALUES ('"+acc.getName()+"', '"+acc.getCpf()+"','"+acc.getPassword()+"','"+acc.getSecondPassword()+"')";
         conn.inserirRegistro(sql);
     }
 }

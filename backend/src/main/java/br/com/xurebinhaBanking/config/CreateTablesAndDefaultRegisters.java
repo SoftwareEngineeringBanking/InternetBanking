@@ -4,7 +4,7 @@ public class CreateTablesAndDefaultRegisters {
 
     private static final String tblBase = "CREATE TABLE if not exists ";
 
-    private static final String tblClient = "client(ID INT PRIMARY KEY AUTO_INCREMENT, cpf varchar(15), password varchar(255), second_password varchar(255))";
+    private static final String tblClient = "client(ID INT PRIMARY KEY AUTO_INCREMENT, name varchar(100), cpf varchar(15), password varchar(255), second_password varchar(255))";
 
     private static final String tblAccount = "account(ID INT PRIMARY KEY AUTO_INCREMENT," +
             " agency int," +
@@ -12,7 +12,7 @@ public class CreateTablesAndDefaultRegisters {
             " type_account varchar(5)," +
             " balance decimal," +
             " bank varchar(15)," +
-            " limit decimal," +
+            " limit_account decimal," +
             " status_account varchar(10))";
 
     private static final String tblAccountType= "account_type(ID INT PRIMARY KEY AUTO_INCREMENT," +

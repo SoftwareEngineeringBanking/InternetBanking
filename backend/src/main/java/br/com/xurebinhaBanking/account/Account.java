@@ -1,50 +1,41 @@
 package br.com.xurebinhaBanking.account;
 
+import java.math.BigDecimal;
+
 public class Account {
+    private int agency;
+    private int number;
+    //private AccountType accountType;
+    private double balance;
+    //private Bank bank;
+    private BigDecimal limitAccount;
+    //private StatusAccount statusAccount;
 
-    private String login;
-    private String password;
-    private String name;
-    private String cpf;
-    private Double balance;
-
-    public String getLogin() {
-        return login;
+    public int getAgency(){
+        return agency;
+    }
+    public void setAgency(int agency) {
+        this.agency = agency;
     }
 
-    public void setLogin(String login) {
-        this.login = login;
+    public int getNumber() {
+        return number;
     }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getCpf() {
-        return cpf;
-    }
-
-    public void setCpf(String cpf) {
-        this.cpf = cpf;
+    public void setNumber(int number) {
+        this.number = number;
     }
 
     public Double getBalance() {
         return balance;
     }
-
     public void setBalance(Double balance) {
         this.balance = balance;
+    }
+
+    public BigDecimal getLimitAccount(){
+        return limitAccount;
+    }
+    public void setLimitAccount(BigDecimal limitAccount){
+        this.limitAccount = limitAccount;
     }
 }
