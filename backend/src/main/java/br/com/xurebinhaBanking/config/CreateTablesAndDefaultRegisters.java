@@ -44,6 +44,19 @@ public class CreateTablesAndDefaultRegisters {
     private static final String insTblBankType = "('INTERNAL'), ('EXTERNAL')";
 
     public CreateTablesAndDefaultRegisters(H2JDBCUtils conn){
+        createTables(conn);
+        deleteOldRegisters(conn);
+        insertRegisters(conn);
+    }
+
+    private void insertRegisters(H2JDBCUtils conn) {
+        //insere registros padroes
+        conn.inserirRegistro("INSERT INTO transaction_type (name) VALUES " + insTblTransactionType);
+        conn.inserirRegistro("INSERT INTO account_status (name) VALUES "+ insTblAccountStatus );
+        conn.inserirRegistro("INSERT INTO bank_type (name) VALUES "+ insTblBankType );
+    }
+
+    private void createTables(H2JDBCUtils conn) {
         conn.criarTabela(tblBase + tblClient);
         conn.criarTabela(tblBase + tblAccount);
         conn.criarTabela(tblBase + tblAccountType);
@@ -52,11 +65,11 @@ public class CreateTablesAndDefaultRegisters {
         conn.criarTabela(tblBase + tblAccountStatus);
         conn.criarTabela(tblBase + tblBank);
         conn.criarTabela(tblBase + tblBankType);
-        
-        //insere registros padroes
-        conn.inserirRegistro("INSERT INTO transaction_type (name) VALUES " + insTblTransactionType);
-        conn.inserirRegistro("INSERT INTO account_status (name) VALUES "+ insTblAccountStatus );
-        conn.inserirRegistro("INSERT INTO bank_type (name) VALUES "+ insTblBankType );
+    }
 
+    private void deleteOldRegisters(H2JDBCUtils conn){
+        conn.apagarRegistro("DELETE FROM transaction_type");
+        conn.apagarRegistro("DELETE FROM account_status");
+        conn.apagarRegistro("DELETE FROM bank_type");
     }
 }
