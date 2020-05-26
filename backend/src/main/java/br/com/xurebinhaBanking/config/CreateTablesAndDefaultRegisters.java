@@ -4,7 +4,7 @@ public class CreateTablesAndDefaultRegisters {
 
     private static final String tblBase = "CREATE TABLE if not exists ";
 
-    private static final String tblClient = "client(ID INT PRIMARY KEY AUTO_INCREMENT, cpf varchar(15), password varchar(255), second_password varchar(255))";
+    private static final String tblClient = "client(ID INT PRIMARY KEY AUTO_INCREMENT, name varchar(100), cpf varchar(15), password varchar(255), second_password varchar(255))";
 
     private static final String tblAccount = "account(ID INT PRIMARY KEY AUTO_INCREMENT," +
             " agency int," +
@@ -12,7 +12,7 @@ public class CreateTablesAndDefaultRegisters {
             " type_account varchar(5)," +
             " balance decimal," +
             " bank varchar(15)," +
-            " limit decimal," +
+            " limit_account decimal," +
             " status_account varchar(10))";
 
     private static final String tblAccountType= "account_type(ID INT PRIMARY KEY AUTO_INCREMENT," +
@@ -44,6 +44,19 @@ public class CreateTablesAndDefaultRegisters {
     private static final String insTblBankType = "('INTERNAL'), ('EXTERNAL')";
 
     public CreateTablesAndDefaultRegisters(H2JDBCUtils conn){
+        createTables(conn);
+        deleteOldRegisters(conn);
+        insertRegisters(conn);
+    }
+
+    private void insertRegisters(H2JDBCUtils conn) {
+        //insere registros padroes
+        conn.inserirRegistro("INSERT INTO transaction_type (name) VALUES " + insTblTransactionType);
+        conn.inserirRegistro("INSERT INTO account_status (name) VALUES "+ insTblAccountStatus );
+        conn.inserirRegistro("INSERT INTO bank_type (name) VALUES "+ insTblBankType );
+    }
+
+    private void createTables(H2JDBCUtils conn) {
         conn.criarTabela(tblBase + tblClient);
         conn.criarTabela(tblBase + tblAccount);
         conn.criarTabela(tblBase + tblAccountType);
@@ -52,11 +65,11 @@ public class CreateTablesAndDefaultRegisters {
         conn.criarTabela(tblBase + tblAccountStatus);
         conn.criarTabela(tblBase + tblBank);
         conn.criarTabela(tblBase + tblBankType);
-        
-        //insere registros padroes
-        conn.inserirRegistro("INSERT INTO transaction_type (name) VALUES " + insTblTransactionType);
-        conn.inserirRegistro("INSERT INTO account_status (name) VALUES "+ insTblAccountStatus );
-        conn.inserirRegistro("INSERT INTO bank_type (name) VALUES "+ insTblBankType );
+    }
 
+    private void deleteOldRegisters(H2JDBCUtils conn){
+        conn.apagarRegistro("DELETE FROM transaction_type");
+        conn.apagarRegistro("DELETE FROM account_status");
+        conn.apagarRegistro("DELETE FROM bank_type");
     }
 }
