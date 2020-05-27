@@ -8,12 +8,12 @@ public class CreateTablesAndDefaultRegisters {
 
     private static final String tblAccount = "account(ID INT PRIMARY KEY AUTO_INCREMENT," +
             " agency int," +
-            " numberAccount int," +
-            " type_account varchar(5)," +
+            " number_account int," +
+            " type_account varchar(50)," +
             " balance decimal," +
-            " bank varchar(15)," +
+            " bank varchar(50)," +
             " limit_account decimal," +
-            " status_account varchar(10))";
+            " status_account varchar(50))";
 
     private static final String tblAccountType= "account_type(ID INT PRIMARY KEY AUTO_INCREMENT," +
             " type_name_account varchar(150)," +
