@@ -1,4 +1,4 @@
-package br.com.xurebinhaBanking.account;
+package br.com.xurebinhaBanking.model;
 
 public enum StatusAccount {
     ACTIVE, INATIVE, BLOCKED, SUSPENDED, IN_DEBT;
