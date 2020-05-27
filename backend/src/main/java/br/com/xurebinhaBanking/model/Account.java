@@ -1,10 +1,14 @@
 package br.com.xurebinhaBanking.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class Account {
     private int agency;
     private int number;
@@ -13,16 +17,4 @@ public class Account {
     private StatusAccount statusAccount;
     private AccountType accountType;
     private Bank bank;
-
-    public Account(int agency, int number, BigDecimal balance, BigDecimal limitAccount,
-                   StatusAccount statusAccount, AccountType accountType, Bank bank) {
-        this.agency = agency;
-        this.number = number;
-        this.balance = balance;
-        this.limitAccount = limitAccount;
-        this.statusAccount = statusAccount;
-        this.accountType = accountType;
-        this.bank = bank;
-    }
-
 }

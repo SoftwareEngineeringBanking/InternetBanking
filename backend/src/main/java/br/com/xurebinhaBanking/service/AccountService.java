@@ -2,6 +2,7 @@ package br.com.xurebinhaBanking.service;
 
 import br.com.xurebinhaBanking.config.H2JDBCUtils;
 import br.com.xurebinhaBanking.dao.AccountRepository;
+import br.com.xurebinhaBanking.dao.ClientRepository;
 import br.com.xurebinhaBanking.model.Client;
 
 import java.util.Scanner;
@@ -11,25 +12,29 @@ public class AccountService {
     private static String NOVA_LINHA = "\n";
     private H2JDBCUtils conn;
     private AccountRepository accountRepository;
+    private ClientRepository clientRepository;
+    private static boolean FIM_MENU_CONTA = false;
 
     public AccountService(H2JDBCUtils conn) {
         this.conn = conn;
         this.accountRepository = new AccountRepository(conn);
+        this.clientRepository = new ClientRepository(conn);
     }
 
     public void actionAccount(){
         Scanner in = new Scanner(System.in);
-        Client client = new Client();
-        boolean sairConta = false;
+        //Client client = new Client();
+
 
         System.out.println("------------ MENU DE ACESSO A CONTA ------------");
-        System.out.println("Digite seu cpf:");
+        System.out.println(clientRepository.listClients());
+        System.out.println("Digite o ID do usuario que deseja:");
         //TODO Ajustar a busca de CPF
-        client.setCpf(in.next());
+        //client.setCpf(in.next());
 
         System.out.println("Digite sua Senha:");
         //TODO ajustar a validacao de senha
-        client.setPassword(in.next());
+        //client.setPassword(in.next());
 
         do {
             System.out.println(menu());
@@ -42,11 +47,11 @@ public class AccountService {
                     System.out.println("Fazer Transferencia" + NOVA_LINHA);
 
                     System.out.println("Valor:");
-                    client.setBalance(in.nextBigDecimal());
+                    //client.setBalance(in.nextBigDecimal());
                     break;
                 case 2:
                     System.out.println("Verificar Saldo" + NOVA_LINHA);
-                    System.out.println("Saldo Atual:"+client.getBalance());
+                    //System.out.println("Saldo Atual:"+client.getBalance());
                     break;
                 case 3:
                     //TODO ajustar
@@ -65,10 +70,10 @@ public class AccountService {
                     break;
                 case 0:
                 default:
-                    sairConta =true;
+                    FIM_MENU_CONTA = true;
                     break;
             }
-        } while(!sairConta);
+        } while(!FIM_MENU_CONTA);
     }
     private static String menu() {
         return "1 - Fazer Transferencia" +NOVA_LINHA+

@@ -6,7 +6,6 @@ import br.com.xurebinhaBanking.dao.ClientRepository;
 import br.com.xurebinhaBanking.model.*;
 
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.util.Scanner;
 
 public class ClientService {
@@ -79,7 +78,7 @@ public class ClientService {
 
     //Todo validar tipo da conta e buscar o tipo da conta
     private static AccountType getDefaultAccountType(){
-        return new AccountType("",0,0,0,0,0);
+        return new AccountType("PADRAO",0,0,0,0,0);
     }
 
 }
