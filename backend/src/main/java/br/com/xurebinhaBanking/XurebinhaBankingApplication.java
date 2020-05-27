@@ -1,7 +1,6 @@
 package br.com.xurebinhaBanking;
 
-import br.com.xurebinhaBanking.account.AccessAccount;
-import br.com.xurebinhaBanking.account.CreateAccount;
+import br.com.xurebinhaBanking.accounts.*;
 import br.com.xurebinhaBanking.config.CreateTablesAndDefaultRegisters;
 import br.com.xurebinhaBanking.config.H2JDBCUtils;
 

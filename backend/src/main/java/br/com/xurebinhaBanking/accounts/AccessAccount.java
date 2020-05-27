@@ -1,6 +1,4 @@
-package br.com.xurebinhaBanking.account;
-
-import br.com.xurebinhaBanking.XurebinhaBankingApplication;
+package br.com.xurebinhaBanking.accounts;
 
 import java.util.Scanner;
 

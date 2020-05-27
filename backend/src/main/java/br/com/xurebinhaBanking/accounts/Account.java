@@ -1,4 +1,4 @@
-package br.com.xurebinhaBanking.account;
+package br.com.xurebinhaBanking.accounts;
 
 public class Account {
 

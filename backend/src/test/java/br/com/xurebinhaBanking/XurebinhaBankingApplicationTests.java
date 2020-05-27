@@ -1,13 +1,7 @@
 package br.com.xurebinhaBanking;
 
-import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
-
-@SpringBootTest
 class XurebinhaBankingApplicationTests {
 
-	@Test
-	void contextLoads() {
-	}
-
+    //GUIA DE COMO UTILIZAR JUNIT
+    // https://junit.org/junit5/docs/current/user-guide/
 }

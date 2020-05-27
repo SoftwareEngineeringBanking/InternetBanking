@@ -1,8 +1,7 @@
-package br.com.xurebinhaBanking.account;
+package br.com.xurebinhaBanking.accounts;
 
 import br.com.xurebinhaBanking.config.H2JDBCUtils;
 
-import java.sql.Connection;
 import java.util.Scanner;
 
 public class CreateAccount {
