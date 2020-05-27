@@ -1,5 +1,7 @@
 package br.com.xurebinhaBanking.accounts;
 
+import br.com.xurebinhaBanking.client.Client;
+
 import java.util.Scanner;
 
 public class AccessAccount {
@@ -8,15 +10,15 @@ public class AccessAccount {
 
     Scanner in = new Scanner(System.in);
 
-    Account account = new Account();
+    Client client = new Client();
 
     public void actionAccount(){
 
-        System.out.println("Digite seu Login:");
-        account.setLogin(in.next());
+        System.out.println("Digite seu cpf:");
+        client.setCpf(in.next());
 
         System.out.println("Digite sua Senha:");
-        account.setPassword(in.next());
+        client.setPassword(in.next());
 
         boolean finalize = true;
 
@@ -31,11 +33,11 @@ public class AccessAccount {
                     System.out.println("Fazer Deposito" + NOVA_LINHA);
 
                     System.out.println("Valor:");
-                    account.setBalance(in.nextDouble());
+                    client.setBalance(in.nextDouble());
                     break;
                 case 2:
                     System.out.println("Verificar Saldo" + NOVA_LINHA);
-                    System.out.println("Saldo Atual:"+account.getBalance());
+                    System.out.println("Saldo Atual:"+client.getBalance());
                     break;
                 case 3:
                     System.out.println("Realizar Saque" + NOVA_LINHA);
@@ -43,12 +45,12 @@ public class AccessAccount {
                     System.out.println("Valor:");
                     double saque = in.nextDouble();
 
-                    if (saque > account.getBalance()) {
+                    if (saque > client.getBalance()) {
                         System.out.println("Saldo Insuficiente" + NOVA_LINHA);
                     } else {
-                        account.setBalance(account.getBalance() - saque);
+                        client.setBalance(client.getBalance() - saque);
 
-                        System.out.println("Saldo Atual:" + account.getBalance());
+                        System.out.println("Saldo Atual:" + client.getBalance());
                     }
                     break;
                 case 4 :
