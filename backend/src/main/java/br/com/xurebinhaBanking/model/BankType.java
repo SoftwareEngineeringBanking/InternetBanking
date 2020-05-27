@@ -1,4 +1,4 @@
-package br.com.xurebinhaBanking.bank;
+package br.com.xurebinhaBanking.model;
 
 public enum BankType {
     INTERNAL, EXTERNAL;
