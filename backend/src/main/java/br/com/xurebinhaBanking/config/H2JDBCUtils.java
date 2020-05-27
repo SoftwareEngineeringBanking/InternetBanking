@@ -2,10 +2,7 @@ package br.com.xurebinhaBanking.config;
 
 import lombok.Data;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 
 @Data
 public class H2JDBCUtils {
@@ -42,6 +39,17 @@ public class H2JDBCUtils {
         } catch (SQLException e) {
             printSQLException(e);
         }
+    }
+
+    public ResultSet consultarRegistros(String sqlSelect){
+        ResultSet rs = null;
+        try {
+             rs = stmt.executeQuery(sqlSelect);
+        } catch (SQLException e) {
+            printSQLException(e);
+        }
+
+        return rs;
     }
 
     public static void fecharConexao() {

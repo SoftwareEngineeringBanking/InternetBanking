@@ -11,13 +11,13 @@ public class AccountRepository {
     }
 
     public void createAccount(Account account) {
-        String sql = "INSERT INTO account (agency, numberAccount, type_account, balance, bank, limit_account,status_account) " +
-                "VALUES ('" + account.getAgency() + "', '" +
-                account.getNumber() + "','" +
-                account.getAccountType().toString() + "','" +
-                account.getBalance() + "','" +
-                account.getBank().getCod() + "','" +
-                account.getLimitAccount() + "','" +
+        String sql = "INSERT INTO account (agency, number_account, type_account, balance, bank, limit_account, status_account) " +
+                "VALUES (" + account.getAgency() + ", " +
+                account.getNumber() + ",'" +
+                account.getAccountType().getNameAccountType() + "'," +
+                account.getBalance() + "," +
+                account.getBank().getCod() + "," +
+                account.getLimitAccount() + ",'" +
                 account.getStatusAccount().toString() + "')";
         conn.inserirRegistro(sql);
     }
