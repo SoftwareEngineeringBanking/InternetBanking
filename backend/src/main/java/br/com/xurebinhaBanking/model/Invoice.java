@@ -3,6 +3,8 @@ package br.com.xurebinhaBanking.model;
 import lombok.Data;
 
 import java.math.BigDecimal;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @Data
@@ -21,8 +23,15 @@ public class Invoice {
 
         this.codeBar = codeBar;
         this.id = Integer.decode(codeBar.substring(0,5));
-        //this.dateEnd = "";
-        this.value = new BigDecimal(codeBar.substring(12,codeBar.length()));
+        String date = codeBar.substring(5,13);
+        SimpleDateFormat format = new SimpleDateFormat("ddMMyyyy");
+        try {
+            this.dateEnd = format.parse(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        this.value = new BigDecimal(codeBar.substring(13,codeBar.length()));
 
     }
 }

@@ -6,6 +6,7 @@ import br.com.xurebinhaBanking.dao.ClientRepository;
 import br.com.xurebinhaBanking.model.Account;
 import br.com.xurebinhaBanking.model.Client;
 import br.com.xurebinhaBanking.model.Invoice;
+import br.com.xurebinhaBanking.model.TransactionType;
 
 import java.math.BigDecimal;
 import java.util.Scanner;
@@ -13,19 +14,23 @@ import java.util.Scanner;
 public class AccountService {
 
     private static String NOVA_LINHA = "\n";
+    private static boolean FIM_MENU_CONTA = false;
     private H2JDBCUtils conn;
     private AccountRepository accountRepository;
     private ClientRepository clientRepository;
-    private static boolean FIM_MENU_CONTA = false;
+    private TransactionService transactionService;
+    private static Scanner in;
 
     public AccountService(H2JDBCUtils conn) {
         this.conn = conn;
         this.accountRepository = new AccountRepository(conn);
         this.clientRepository = new ClientRepository(conn);
+        this.transactionService = new TransactionService(conn);
+        this.in = new Scanner(System.in);
     }
 
     public void actionAccount() {
-        Scanner in = new Scanner(System.in);
+
 
         System.out.println("---------- ACESSO A CONTA ------------");
         System.out.println("-------- Clientes cadastrados: ----------");
@@ -87,14 +92,12 @@ public class AccountService {
         } while (!FIM_MENU_CONTA);
     }
 
+    //- Pagamento de contas (solicitando uma segunda senha e um código de barras válido em algum formato específico a escolher pelo grupo)
+    //o valor é debitado da conta e a operação aparece no extrato
     private void payBills(Client client) {
-        Scanner in = new Scanner(System.in);
-        boolean validaSenhaCliente = false;
-        //todo ajustar para selecionar a conta
-        //- Pagamento de contas (solicitando uma segunda senha e um código de barras válido em algum formato específico a escolher pelo grupo)
-        //o valor é debitado da conta e a operação aparece no extrato
         System.out.println("Para o pagamento de contas, forneca sua segunda senha.");
         System.out.println("Digite a Senha do usuario:");
+        boolean validaSenhaCliente = false;
         String secondPassClient = in.next();
         do {
             validaSenhaCliente = clientRepository.secondPasswordOk(client.getId(), secondPassClient);
@@ -104,6 +107,9 @@ public class AccountService {
                 //todo ajustar para sair, caso queira
             }
         } while (!validaSenhaCliente);
+
+        //todo ajustar para selecionar a conta
+        Account selAccount = selectAccount(client);
 
         System.out.println("Digite um codigo de barras valido:");
         String codigoBarras = in.next();
@@ -117,29 +123,50 @@ public class AccountService {
                 //todo ajustar para sair, caso queira
             }
         } while (!validaCodigoBarras);
-        //
+
         Invoice invoice = new Invoice(codigoBarras);
-        //valida saldo
-        if(getAllFunds(client).compareTo(invoice.getValue())>=1){
+        if(getAllFunds(selAccount).compareTo(invoice.getValue())>=1){
             //adicionar pagamento nas transacoes
+            transactionService.createPaymentTransaction(selAccount.getId(), invoice);
+            
+            //debitar valor da conta
+            selAccount.getBalance().subtract(invoice.getValue());
+
+            //Atualizar o saldo
+            accountRepository.updateBalance(selAccount);
 
         }else{
             System.out.println("O cliente "+client.getName()+" não possui saldo suficiente!");
         }
     }
 
-    private BigDecimal getAllFunds(Client client) {
-        BigDecimal allFunds = new BigDecimal(0);
-        if (client.getAccountList().size() > 0) {
-            for (int i = 0; i < client.getAccountList().size(); i++) {
-                Account acc = client.getAccountList().get(i);
-                allFunds.add(acc.getLimitAccount().add(acc.getBalance()));
+    private Account selectAccount(Client client) {
+        System.out.println("-------- Contas existentes: ----------");
+        String listAccounts = accountRepository.listAccounts(client.getId());
+        System.out.println(listAccounts);
+        System.out.println("Digite o ID da conta que deseja:");
+        boolean validaSelecaoAccount = false;
+        int selAccount = in.nextInt();
+        do {
+            validaSelecaoAccount = accountRepository.existAccount(selAccount);
+            if (!validaSelecaoAccount) {
+                System.out.println("Conta nao encontrado, selecione outra:");
+                System.out.println(listAccounts);
+                selAccount = in.nextInt();
+                //todo ajustar para sair, caso queira
             }
-            return allFunds;
-        } else {
-            System.out.println("CLIENTE: " + client.getName() + " não possui contas.");
-            return allFunds;
+        } while (!validaSelecaoAccount);
+
+        for (int i = 0; i <client.getAccountList().size(); i++) {
+            if(client.getAccountList().get(i).getId() == selAccount)
+                return client.getAccountList().get(i);
         }
+
+        return null;
+    }
+
+    private BigDecimal getAllFunds(Account account) {
+        return account.getLimitAccount().add(account.getBalance());
     }
 
     private boolean checkCode(String codigoBarras) {
