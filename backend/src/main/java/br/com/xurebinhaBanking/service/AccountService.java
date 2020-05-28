@@ -50,18 +50,7 @@ public class AccountService {
             }
         } while (!validaSelecaoCliente);
 
-        boolean validaSenhaCliente = false;
-        System.out.println("Digite a Senha do usuario:");
-        String senhaClient = in.next();
-        do {
-            validaSenhaCliente = clientRepository.passwordOk(selClient, senhaClient);
-            if (!validaSenhaCliente) {
-                System.out.println("Senha do cliente '" + selClient + "' nao confere, tente novamente:");
-                System.out.println(listCLients);
-                senhaClient = in.next();
-
-            }
-        } while (!validaSenhaCliente);
+        validateFirstPassword(selClient);
         //find on
         Client client = clientRepository.findClient(selClient);
         do {
@@ -72,7 +61,7 @@ public class AccountService {
 
             switch (acao) {
                 case 1:
-                    System.out.println("Fazer Transferencia" + NOVA_LINHA);
+                    makeTransfer(client, listCLients);
                     break;
                 case 2:
                     viewBalance(client);
@@ -85,6 +74,10 @@ public class AccountService {
                     System.out.println("Funcao ainda nao implementada!");
                     break;
                 case 5:
+                    //TODO ajustar
+                    System.out.println("Funcao ainda nao implementada!");
+                    break;
+                case 6:
                     changePassword(client);
                     break;
                 case 0:
@@ -95,23 +88,59 @@ public class AccountService {
         } while (!FIM_MENU_CONTA);
     }
 
+    private void validateFirstPassword(int selClient) {
+        boolean validaSenhaCliente = false;
+        System.out.println("Digite a Senha do usuario:");
+        String senhaClient = in.next();
+        do {
+            validaSenhaCliente = clientRepository.passwordOk(selClient, senhaClient);
+            if (!validaSenhaCliente) {
+                System.out.println("Senha do cliente '" + selClient + "' nao confere, tente novamente:");
+                senhaClient = in.next();
+
+            }
+        } while (!validaSenhaCliente);
+    }
+
+    /*
+    - Transferência de valores (solicitando uma segunda senha de segurança e respeitando um limite definido pelo tipo de conta -
+    universitária até 500 reais em dias de semana e 250 em todo o fim de semana, conta corrente padrão até 5000 reais em dias de
+    semana e 1500 em todo o fim de semana, conta premium até 30000 reais em dias de semana e 15000 reais em todo o fim de semana)
+    o valor é debitado da conta e a operação aparece no extrato; entre clientes Xurebinha (codigo bancario 666)
+    não há tarifas e o valor é disponibilizado na hora; para clientes de outros bancos, a tarifa depende do tipo de conta e os
+    valores aparecem nos outros bancos em até 48 horas (unversitária tem 2 transferencias gratuitas mensais, depois 10 por
+    cada transferencia; padrão tem 4 e depois sao 10 reais; conta premium não tem limite mensal e paga somente 6 reais)
+     */
+    private void makeTransfer(Client client, String listCLients) {
+        validateSecondPassword(client);
+        System.out.println("Para a transferencia selecione a conta origem:");
+        Account selAccountOut = selectAccount(client);
+        System.out.println("Selecione o cliente destino:");
+
+        boolean validaSelecaoClienteDestino = false;
+        int selClientDest = in.nextInt();
+        do {
+            validaSelecaoClienteDestino = clientRepository.existClient(selClientDest);
+            if (!validaSelecaoClienteDestino) {
+                System.out.println("Cliente nao encontrado, selecione outro:");
+                System.out.println(listCLients);
+                selClientDest = in.nextInt();
+                //todo ajustar para sair, caso queira
+            }
+        } while (!validaSelecaoClienteDestino);
+
+        Client clientDest = clientRepository.findClient(selClientDest);
+
+        System.out.println("Funcao ainda nao terminada");
+
+    }
+
     //- Pagamento de contas (solicitando uma segunda senha e um código de barras válido em algum formato específico a escolher pelo grupo)
     //o valor é debitado da conta e a operação aparece no extrato
     private void payBills(Client client) {
         System.out.println("Para o pagamento de contas, forneca sua segunda senha.");
-        System.out.println("Digite a Senha do usuario:");
-        boolean validaSenhaCliente = false;
-        String secondPassClient = in.next();
-        do {
-            validaSenhaCliente = clientRepository.secondPasswordOk(client.getId(), secondPassClient);
-            if (!validaSenhaCliente) {
-                System.out.println("Segunda Senha do cliente '" + client.getId() + "' nao confere, tente novamente:");
-                secondPassClient = in.next();
-                //todo ajustar para sair, caso queira
-            }
-        } while (!validaSenhaCliente);
+        validateSecondPassword(client);
 
-        //todo ajustar para selecionar a conta
         Account selAccount = selectAccount(client);
 
         System.out.println("Digite um codigo de barras valido:");
@@ -141,6 +170,21 @@ public class AccountService {
         }else{
             System.out.println("O cliente "+client.getName()+" não possui saldo suficiente!");
         }
+    }
+
+    private void validateSecondPassword(Client client) {
+        boolean validaSenhaCliente = false;
+        String secondPassClient = in.next();
+        System.out.println("Digite a SEGUNDA SENHA do usuario:");
+        do {
+            validaSenhaCliente = clientRepository.secondPasswordOk(client.getId(), secondPassClient);
+            if (!validaSenhaCliente) {
+                System.out.println("Segunda Senha do cliente '" + client.getId() + "' nao confere, tente novamente:");
+                secondPassClient = in.next();
+                //todo ajustar para sair, caso queira
+            }
+        } while (!validaSenhaCliente);
+        //validaSenhaCliente;
     }
 
     private Account selectAccount(Client client) {
@@ -237,9 +281,10 @@ public class AccountService {
                 "---------------------------------" +NOVA_LINHA+
                 "1 - Fazer Transferencia" +NOVA_LINHA+
                 "2 - Verificar Saldo" +NOVA_LINHA+
-                "3 - Realizar Saque"+NOVA_LINHA+
-                "4 - Informacoes de conta"+NOVA_LINHA+
-                "5 - Alterar senha"+NOVA_LINHA+
+                "3 - Pagar Conta"+NOVA_LINHA+
+                "4 - Fazer Emprestimo"+NOVA_LINHA+
+                "5 - Pagar Emprestimo"+NOVA_LINHA+
+                "6 - Alterar senha"+NOVA_LINHA+
                 "0 - Retornar ao Menu Inicial";
     }
 
