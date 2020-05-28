@@ -72,14 +72,19 @@ public class AccountService {
                     payBills(client);
                     break;
                 case 4:
-                    System.out.println("Atualizar dados");
-                    updateAccount(client);
+                    //TODO ajustar
+                    System.out.println("-----FAZER EMPRESTIMO-----");
+                    System.out.println("Funcao ainda nao implementada!");
                     break;
                 case 5:
                     //TODO ajustar
+                    System.out.println("-----PAGAR EMPRESTIMO-----");
                     System.out.println("Funcao ainda nao implementada!");
                     break;
                 case 6:
+                    updateAccount(client);
+                    break;
+                case 7:
                     changePassword(client);
                     break;
                 case 0:
@@ -282,74 +287,63 @@ public class AccountService {
         }
     }
 
-        private void changePassword (Client client){
-            Scanner in = new Scanner(System.in);
-            System.out.println(client.getName() + " DIGITE SUA SENHA ATUAL: ");
-            String passwordClient = in.next();
-            boolean validaSenhaCliente = false;
+    private void changePassword(Client client) {
+        Scanner in = new Scanner(System.in);
+        System.out.println(client.getName() + " DIGITE SUA SENHA ATUAL: ");
+        String passwordClient = in.next();
+        boolean validaSenhaCliente = false;
 
-            do {
-                validaSenhaCliente = clientRepository.passwordOk(client.getId(), passwordClient);
-                if (!validaSenhaCliente) {
-                    System.out.println("Senha incorreta, tente novamente:");
-                    passwordClient = in.next();
-                }
-            } while (!validaSenhaCliente);
+        do {
+            validaSenhaCliente = clientRepository.passwordOk(client.getId(), passwordClient);
+            if (!validaSenhaCliente) {
+                System.out.println("Senha incorreta, tente novamente:");
+                passwordClient = in.next();
+            }
+        } while (!validaSenhaCliente);
 
-            System.out.println(client.getName() + " DIGITE SUA SEGUNDA SENHA ATUAL: ");
-            String secondPasswordClient = in.next();
-            boolean validaSegundaSenhaCliente = false;
-            do {
-                validaSegundaSenhaCliente = clientRepository.secondPasswordOk(client.getId(), secondPasswordClient);
-                if (!validaSegundaSenhaCliente) {
-                    System.out.println("Senha incorreta, tente novamente:");
-                    secondPasswordClient = in.next();
-                }
-            } while (!validaSegundaSenhaCliente);
+        System.out.println(client.getName() + " DIGITE SUA SEGUNDA SENHA ATUAL: ");
+        String secondPasswordClient = in.next();
+        boolean validaSegundaSenhaCliente = false;
+        do {
+            validaSegundaSenhaCliente = clientRepository.secondPasswordOk(client.getId(), secondPasswordClient);
+            if (!validaSegundaSenhaCliente) {
+                System.out.println("Senha incorreta, tente novamente:");
+                secondPasswordClient = in.next();
+            }
+        } while (!validaSegundaSenhaCliente);
 
-            System.out.println("DIGITE SUA NOVA SENHA");
-            String newPasswordClient = in.next();
+        System.out.println("DIGITE SUA NOVA SENHA");
+        String newPasswordClient = in.next();
 
-            System.out.println("DIGITE SUA NOVA SEGUNDA SENHA");
-            String newSecondPasswordClient = in.next();
+        System.out.println("DIGITE SUA NOVA SEGUNDA SENHA");
+        String newSecondPasswordClient = in.next();
 
-            client.setPassword(newPasswordClient);
-            client.setSecondPassword(newSecondPasswordClient);
+        client.setPassword(newPasswordClient);
+        client.setSecondPassword(newSecondPasswordClient);
 
-            clientRepository.changePasswordBd(client);
-        }
-
-        private static String menu () {
-            return "---------------------------------" + NOVA_LINHA +
-                    "----MENU DE CONTA DO CLIENTE----" + NOVA_LINHA +
-                    "---------------------------------" + NOVA_LINHA +
-                    "1 - Fazer Transferencia" + NOVA_LINHA +
-                    "2 - Verificar Saldo" + NOVA_LINHA +
-                    "3 - Realizar Saque" + NOVA_LINHA +
-                    "4 - Atualizar Dados" + NOVA_LINHA +
-                    "5 - Alterar senha" + NOVA_LINHA +
-                    "0 - Retornar ao Menu Inicial";
-        }
-
-
-        private String menuAccount() {
-            return "---------------------------------" + NOVA_LINHA +
-                    "----Atualizar dados----" + NOVA_LINHA +
-                    "1 - Limite" + NOVA_LINHA +
-                    "2 - Status" + NOVA_LINHA +
-                    "0 - Atualizar";
-        }
-
-    private static String menu2() {
-        return "---------------------------------" +NOVA_LINHA+
-                "----MENU DE CONTA DO CLIENTE----"+NOVA_LINHA+
-                "---------------------------------" +NOVA_LINHA+
-                "1 - Fazer Transferencia" +NOVA_LINHA+
-                "2 - Verificar Saldo" +NOVA_LINHA+
-                "3 - Pagar Conta"+NOVA_LINHA+
-                "4 - Fazer Emprestimo"+NOVA_LINHA+
-                "5 - Pagar Emprestimo"+NOVA_LINHA+
-                "6 - Alterar senha"+NOVA_LINHA+
-                "0 - Retornar ao Menu Inicial";
-
+        clientRepository.changePasswordBd(client);
     }
+
+    private static String menu() {
+        return "---------------------------------" + NOVA_LINHA +
+                "----MENU DE CONTA DO CLIENTE----" + NOVA_LINHA +
+                "---------------------------------" + NOVA_LINHA +
+                "1 - Fazer Transferencia" + NOVA_LINHA +
+                "2 - Verificar Saldo" + NOVA_LINHA +
+                "3 - Pagar Conta " + NOVA_LINHA +
+                "4 - Fazer Emprestimo" + NOVA_LINHA +
+                "5 - Pagar Emprestimo" + NOVA_LINHA +
+                "6 - Atualizar Dados" + NOVA_LINHA +
+                "8 - Alterar senha" + NOVA_LINHA +
+                "0 - Retornar ao Menu Inicial";
+    }
+
+    private String menuAccount() {
+        return "---------------------------------" + NOVA_LINHA +
+                "----Atualizar dados----" + NOVA_LINHA +
+                "1 - Limite" + NOVA_LINHA +
+                "2 - Status" + NOVA_LINHA +
+                "0 - Atualizar";
+    }
+
+}
