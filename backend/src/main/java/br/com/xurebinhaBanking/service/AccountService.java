@@ -66,10 +66,10 @@ public class AccountService {
                     System.out.println("Fazer Transferencia" + NOVA_LINHA);
 
                     System.out.println("Valor:");
-                    //client.setBalance(in.nextBigDecimal());
+                    //client.get(in.nextBigDecimal());
                     break;
                 case 2:
-                    System.out.println("Verificar Saldo" + NOVA_LINHA);
+                    viewBalance(client);
                     //System.out.println("Saldo Atual:"+client.getBalance());
                     break;
                 case 3:
@@ -94,6 +94,25 @@ public class AccountService {
             }
         } while(!FIM_MENU_CONTA);
     }
+
+    private void viewBalance(Client client) {
+        if(client.getAccountList().size()>0) {
+
+            System.out.println("CLIENTE: "+client.getName() + " CPF: "+client.getCpf());
+            for (int i = 0; i < client.getAccountList().size(); i++) {
+                Account acc = client.getAccountList().get(i);
+                System.out.println("BANCO: "+acc.getBank().getCod()+" - "+acc.getBank().getName());
+                System.out.println("AGENCIA : "+acc.getAgency()+ " NUM. CONTA: "+acc.getNumber());
+                System.out.println("STATUS: "+acc.getStatusAccount().toString());
+                System.out.println("TIPO DE CONTA: "+acc.getAccountType().getNameAccountType());
+                System.out.println("-------------------");
+                System.out.println("SALDO: "+acc.getBalance() + "  LIMITE: "+acc.getLimitAccount());
+            }
+        }else{
+            System.out.println("CLIENTE: "+client.getName() + " não possui contas.");
+        }
+    }
+
     private static String menu() {
         return "---------------------------------" +NOVA_LINHA+
                 "----MENU DE CONTA DO CLIENTE----"+NOVA_LINHA+
@@ -101,6 +120,7 @@ public class AccountService {
                 "1 - Fazer Transferencia" +NOVA_LINHA+
                 "2 - Verificar Saldo" +NOVA_LINHA+
                 "3 - Realizar Saque"+NOVA_LINHA+
+                "4 - Informacoes de conta"+NOVA_LINHA+
                 "0 - Retornar ao Menu Inicial";
     }
 }
