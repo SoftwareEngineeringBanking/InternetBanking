@@ -67,6 +67,14 @@ public class H2JDBCUtils {
         return 0;
     }
 
+    public void update(String sqlUpdate){
+        try {
+            stmt.executeUpdate(sqlUpdate);
+        } catch (SQLException e) {
+            printSQLException(e);
+        }
+    }
+
     public void apagarRegistro(String sqlDelete){
         try {
             stmt.executeUpdate(sqlDelete);

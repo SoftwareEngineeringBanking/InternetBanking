@@ -2,7 +2,7 @@ package br.com.xurebinhaBanking.config;
 
 public class CreateTablesAndDefaultRegisters {
     //QUANDO MUDAR A ESTRUTURA DO BANCO ALTERAR ESSE NUMERO, PARA RECRIAR AS TABELAS
-    private static final String version = "2";
+    private static final String version = "3";
 
     private static final String tblBase = "CREATE TABLE if not exists ";
 
@@ -31,7 +31,6 @@ public class CreateTablesAndDefaultRegisters {
 
     private static final String tblTransaction = "transaction(ID INT PRIMARY KEY AUTO_INCREMENT," +
             " type_transaction int," +
-            " number_account int," +
             " account_out int," +
             " account_in int," +
             " value_transfer decimal," +
