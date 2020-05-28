@@ -1,12 +1,12 @@
 package br.com.xurebinhaBanking.service;
 
 import br.com.xurebinhaBanking.config.H2JDBCUtils;
-import br.com.xurebinhaBanking.dao.AccountRepository;
-import br.com.xurebinhaBanking.dao.ClientRepository;
-import br.com.xurebinhaBanking.model.Account;
-import br.com.xurebinhaBanking.model.Client;
-import br.com.xurebinhaBanking.model.Invoice;
-import br.com.xurebinhaBanking.model.StatusAccount;
+import br.com.xurebinhaBanking.repository.AccountRepository;
+import br.com.xurebinhaBanking.repository.ClientRepository;
+import br.com.xurebinhaBanking.model.account.Account;
+import br.com.xurebinhaBanking.model.client.Client;
+import br.com.xurebinhaBanking.model.invoice.Invoice;
+import br.com.xurebinhaBanking.model.account.StatusAccount;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;

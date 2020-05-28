@@ -1,5 +1,6 @@
-package br.com.xurebinhaBanking.model;
+package br.com.xurebinhaBanking.model.transaction;
 
+import br.com.xurebinhaBanking.model.account.Account;
 import lombok.Data;
 
 import java.math.BigDecimal;

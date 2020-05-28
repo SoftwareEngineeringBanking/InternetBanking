@@ -1,7 +1,7 @@
 package br.com.xurebinhaBanking.accountTests;
 
-import br.com.xurebinhaBanking.model.Account;
-import br.com.xurebinhaBanking.model.StatusAccount;
+import br.com.xurebinhaBanking.model.account.Account;
+import br.com.xurebinhaBanking.model.account.StatusAccount;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
