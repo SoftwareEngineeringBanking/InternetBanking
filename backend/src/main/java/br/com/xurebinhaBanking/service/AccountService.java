@@ -6,9 +6,11 @@ import br.com.xurebinhaBanking.dao.ClientRepository;
 import br.com.xurebinhaBanking.model.Account;
 import br.com.xurebinhaBanking.model.Client;
 import br.com.xurebinhaBanking.model.Invoice;
-import br.com.xurebinhaBanking.model.TransactionType;
+import br.com.xurebinhaBanking.model.StatusAccount;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class AccountService {
@@ -70,8 +72,8 @@ public class AccountService {
                     payBills(client);
                     break;
                 case 4:
-                    //TODO ajustar
-                    System.out.println("Funcao ainda nao implementada!");
+                    System.out.println("Atualizar dados");
+                    updateAccount(client);
                     break;
                 case 5:
                     //TODO ajustar
@@ -157,18 +159,18 @@ public class AccountService {
         } while (!validaCodigoBarras);
 
         Invoice invoice = new Invoice(codigoBarras);
-        if(getAllFunds(selAccount).compareTo(invoice.getValue())>=1){
+        if (getAllFunds(selAccount).compareTo(invoice.getValue()) >= 1) {
             //adicionar pagamento nas transacoes
             transactionService.createPaymentTransaction(selAccount.getId(), invoice);
-            
+
             //debitar valor da conta
             selAccount.getBalance().subtract(invoice.getValue());
 
             //Atualizar o saldo
             accountRepository.updateBalance(selAccount);
 
-        }else{
-            System.out.println("O cliente "+client.getName()+" não possui saldo suficiente!");
+        } else {
+            System.out.println("O cliente " + client.getName() + " não possui saldo suficiente!");
         }
     }
 
@@ -204,8 +206,8 @@ public class AccountService {
             }
         } while (!validaSelecaoAccount);
 
-        for (int i = 0; i <client.getAccountList().size(); i++) {
-            if(client.getAccountList().get(i).getId() == selAccount)
+        for (int i = 0; i < client.getAccountList().size(); i++) {
+            if (client.getAccountList().get(i).getId() == selAccount)
                 return client.getAccountList().get(i);
         }
 
@@ -217,7 +219,7 @@ public class AccountService {
     }
 
     private boolean checkCode(String codigoBarras) {
-        return codigoBarras.length()==26;
+        return codigoBarras.length() == 26;
     }
 
     private void viewBalance(Client client) {
@@ -238,44 +240,107 @@ public class AccountService {
         }
     }
 
-    private void changePassword(Client client) {
-        Scanner in = new Scanner(System.in);
-        System.out.println(client.getName() + " DIGITE SUA SENHA ATUAL: ");
-        String passwordClient = in.next();
-        boolean validaSenhaCliente = false;
+    private void updateAccount(Client client) {
+        boolean finalize = false;
+        List accountsIds = new ArrayList();
 
-        do{
-            validaSenhaCliente = clientRepository.passwordOk(client.getId(), passwordClient);
-            if(!validaSenhaCliente){
-                System.out.println("Senha incorreta, tente novamente:");
-                passwordClient = in.next();
-            }
-        }while(!validaSenhaCliente);
+        if (!client.getAccountList().isEmpty()) {
+            client.getAccountList().forEach(account -> {
+                accountsIds.add(account.getId());
+                System.out.println("Conta id: " + account.getId());
+            });
+            System.out.println("Selecione o id:" + accountsIds);
+            System.out.println("Digite o id da conta: ");
+            int accountId = in.nextInt();
 
-        System.out.println(client.getName() + " DIGITE SUA SEGUNDA SENHA ATUAL: ");
-        String secondPasswordClient = in.next();
-        boolean validaSegundaSenhaCliente = false;
-        do{
-            validaSegundaSenhaCliente = clientRepository.secondPasswordOk(client.getId(), secondPasswordClient);
-            if(!validaSegundaSenhaCliente){
-                System.out.println("Senha incorreta, tente novamente:");
-                secondPasswordClient = in.next();
-            }
-        }while(!validaSegundaSenhaCliente);
+            Account account = accountRepository.findAccount(accountId);
 
-        System.out.println("DIGITE SUA NOVA SENHA");
-        String newPasswordClient = in.next();
+            do {
+                System.out.println(menuAccount());
 
-        System.out.println("DIGITE SUA NOVA SEGUNDA SENHA");
-        String newSecondPasswordClient = in.next();
+                System.out.println("Digite sua opcao:");
+                int option = in.nextInt();
 
-        client.setPassword(newPasswordClient);
-        client.setSecondPassword(newSecondPasswordClient);
-
-        clientRepository.changePasswordBd(client);
+                switch (option) {
+                    case 1:
+                        System.out.println("Digite o limite desejado:");
+                        account.setLimitAccount(in.nextBigDecimal());
+                        break;
+                    case 2:
+                        System.out.println("Digite o status:");
+                        account.setStatusAccount(Enum.valueOf(StatusAccount.class, in.next()));
+                        break;
+                    case 0:
+                    default:
+                        finalize = true;
+                        accountRepository.updateAccount(account);
+                        break;
+                }
+            } while (finalize);
+        } else {
+            System.out.println("Este cliente não tem contas cadastradas.");
+        }
     }
 
-    private static String menu() {
+        private void changePassword (Client client){
+            Scanner in = new Scanner(System.in);
+            System.out.println(client.getName() + " DIGITE SUA SENHA ATUAL: ");
+            String passwordClient = in.next();
+            boolean validaSenhaCliente = false;
+
+            do {
+                validaSenhaCliente = clientRepository.passwordOk(client.getId(), passwordClient);
+                if (!validaSenhaCliente) {
+                    System.out.println("Senha incorreta, tente novamente:");
+                    passwordClient = in.next();
+                }
+            } while (!validaSenhaCliente);
+
+            System.out.println(client.getName() + " DIGITE SUA SEGUNDA SENHA ATUAL: ");
+            String secondPasswordClient = in.next();
+            boolean validaSegundaSenhaCliente = false;
+            do {
+                validaSegundaSenhaCliente = clientRepository.secondPasswordOk(client.getId(), secondPasswordClient);
+                if (!validaSegundaSenhaCliente) {
+                    System.out.println("Senha incorreta, tente novamente:");
+                    secondPasswordClient = in.next();
+                }
+            } while (!validaSegundaSenhaCliente);
+
+            System.out.println("DIGITE SUA NOVA SENHA");
+            String newPasswordClient = in.next();
+
+            System.out.println("DIGITE SUA NOVA SEGUNDA SENHA");
+            String newSecondPasswordClient = in.next();
+
+            client.setPassword(newPasswordClient);
+            client.setSecondPassword(newSecondPasswordClient);
+
+            clientRepository.changePasswordBd(client);
+        }
+
+        private static String menu () {
+            return "---------------------------------" + NOVA_LINHA +
+                    "----MENU DE CONTA DO CLIENTE----" + NOVA_LINHA +
+                    "---------------------------------" + NOVA_LINHA +
+                    "1 - Fazer Transferencia" + NOVA_LINHA +
+                    "2 - Verificar Saldo" + NOVA_LINHA +
+                    "3 - Realizar Saque" + NOVA_LINHA +
+                    "4 - Atualizar Dados" + NOVA_LINHA +
+                    "5 - Alterar senha" + NOVA_LINHA +
+                    "0 - Retornar ao Menu Inicial";
+        }
+
+
+        private String menuAccount() {
+            return "---------------------------------" + NOVA_LINHA +
+                    "----Atualizar dados----" + NOVA_LINHA +
+                    "1 - Limite" + NOVA_LINHA +
+                    "2 - Status" + NOVA_LINHA +
+                    "0 - Atualizar";
+        }
+
+    private static String menu2() {
         return "---------------------------------" +NOVA_LINHA+
                 "----MENU DE CONTA DO CLIENTE----"+NOVA_LINHA+
                 "---------------------------------" +NOVA_LINHA+
@@ -286,6 +351,5 @@ public class AccountService {
                 "5 - Pagar Emprestimo"+NOVA_LINHA+
                 "6 - Alterar senha"+NOVA_LINHA+
                 "0 - Retornar ao Menu Inicial";
-    }
 
-}
+    }

@@ -87,4 +87,9 @@ public class AccountRepository {
     public void updateBalance(Account account){
         conn.update("UPDATE account SET balance = " +account.getBalance()+ " WHERE id= " + account.getId());
     }
+
+    public void updateAccount(Account account) {
+        conn.update("UPDATE account SET limit_account = " +account.getLimitAccount()+ "," +
+                " status_account = " +account.getStatusAccount()+ " WHERE id= " + account.getId());
+    }
 }
