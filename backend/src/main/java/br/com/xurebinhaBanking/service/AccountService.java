@@ -87,6 +87,9 @@ public class AccountService {
                         System.out.println("Saldo Atual:" + client.getBalance());
                     }*/
                     break;
+                case 5:
+                    alteraSenha(client);
+                    break;
                 case 0:
                 default:
                     FIM_MENU_CONTA = true;
@@ -113,6 +116,10 @@ public class AccountService {
         }
     }
 
+    private void alteraSenha(Client client) {
+        // leo
+    }
+
     private static String menu() {
         return "---------------------------------" +NOVA_LINHA+
                 "----MENU DE CONTA DO CLIENTE----"+NOVA_LINHA+
@@ -121,6 +128,7 @@ public class AccountService {
                 "2 - Verificar Saldo" +NOVA_LINHA+
                 "3 - Realizar Saque"+NOVA_LINHA+
                 "4 - Informacoes de conta"+NOVA_LINHA+
+                "5 - Alterar senha"+NOVA_LINHA+
                 "0 - Retornar ao Menu Inicial";
     }
 }
