@@ -6,9 +6,11 @@ import br.com.xurebinhaBanking.dao.ClientRepository;
 import br.com.xurebinhaBanking.model.Account;
 import br.com.xurebinhaBanking.model.Client;
 import br.com.xurebinhaBanking.model.Invoice;
-import br.com.xurebinhaBanking.model.TransactionType;
+import br.com.xurebinhaBanking.model.StatusAccount;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class AccountService {
@@ -81,8 +83,8 @@ public class AccountService {
                     payBills(client);
                     break;
                 case 4:
-                    //TODO ajustar
-                    System.out.println("Funcao ainda nao implementada!");
+                    System.out.println("Atualizar dados");
+                    updateAccount(client);
                     break;
                 case 0:
                 default:
@@ -125,18 +127,18 @@ public class AccountService {
         } while (!validaCodigoBarras);
 
         Invoice invoice = new Invoice(codigoBarras);
-        if(getAllFunds(selAccount).compareTo(invoice.getValue())>=1){
+        if (getAllFunds(selAccount).compareTo(invoice.getValue()) >= 1) {
             //adicionar pagamento nas transacoes
             transactionService.createPaymentTransaction(selAccount.getId(), invoice);
-            
+
             //debitar valor da conta
             selAccount.getBalance().subtract(invoice.getValue());
 
             //Atualizar o saldo
             accountRepository.updateBalance(selAccount);
 
-        }else{
-            System.out.println("O cliente "+client.getName()+" não possui saldo suficiente!");
+        } else {
+            System.out.println("O cliente " + client.getName() + " não possui saldo suficiente!");
         }
     }
 
@@ -157,8 +159,8 @@ public class AccountService {
             }
         } while (!validaSelecaoAccount);
 
-        for (int i = 0; i <client.getAccountList().size(); i++) {
-            if(client.getAccountList().get(i).getId() == selAccount)
+        for (int i = 0; i < client.getAccountList().size(); i++) {
+            if (client.getAccountList().get(i).getId() == selAccount)
                 return client.getAccountList().get(i);
         }
 
@@ -170,7 +172,7 @@ public class AccountService {
     }
 
     private boolean checkCode(String codigoBarras) {
-        return codigoBarras.length()==26;
+        return codigoBarras.length() == 26;
     }
 
     private void viewBalance(Client client) {
@@ -191,6 +193,48 @@ public class AccountService {
         }
     }
 
+    private void updateAccount(Client client) {
+        boolean finalize = false;
+        List accountsIds = new ArrayList();
+
+        if (!client.getAccountList().isEmpty()) {
+            client.getAccountList().forEach(account -> {
+                accountsIds.add(account.getId());
+                System.out.println("Conta id: " + account.getId());
+            });
+            System.out.println("Selecione o id:" + accountsIds);
+            System.out.println("Digite o id da conta: ");
+            int accountId = in.nextInt();
+
+            Account account = accountRepository.findAccount(accountId);
+
+            do {
+                System.out.println(menuAccount());
+
+                System.out.println("Digite sua opcao:");
+                int option = in.nextInt();
+
+                switch (option) {
+                    case 1:
+                        System.out.println("Digite o limite desejado:");
+                        account.setLimitAccount(in.nextBigDecimal());
+                        break;
+                    case 2:
+                        System.out.println("Digite o status:");
+                        account.setStatusAccount(Enum.valueOf(StatusAccount.class, in.next()));
+                        break;
+                    case 0:
+                    default:
+                        finalize = true;
+                        accountRepository.updateAccount(account);
+                        break;
+                }
+            } while (finalize);
+        } else {
+            System.out.println("Este cliente não tem contas cadastradas.");
+        }
+    }
+
     private static String menu() {
         return "---------------------------------" + NOVA_LINHA +
                 "----MENU DE CONTA DO CLIENTE----" + NOVA_LINHA +
@@ -198,8 +242,16 @@ public class AccountService {
                 "1 - Fazer Transferencia" + NOVA_LINHA +
                 "2 - Verificar Saldo" + NOVA_LINHA +
                 "3 - Pagar Contas" + NOVA_LINHA +
+                "4 - Atualizar Dados" + NOVA_LINHA +
                 //"4 - Informacoes de conta"+NOVA_LINHA+
                 "0 - Retornar ao Menu Inicial";
     }
 
+    private String menuAccount() {
+        return "---------------------------------" + NOVA_LINHA +
+                "----Atualizar dados----" + NOVA_LINHA +
+                "1 - Limite" + NOVA_LINHA +
+                "2 - Status" + NOVA_LINHA +
+                "0 - Atualizar";
+    }
 }
