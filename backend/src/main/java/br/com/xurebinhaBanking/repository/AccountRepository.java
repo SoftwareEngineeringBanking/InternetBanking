@@ -3,7 +3,7 @@ package br.com.xurebinhaBanking.repository;
 import br.com.xurebinhaBanking.config.H2JDBCUtils;
 import br.com.xurebinhaBanking.model.account.Account;
 import br.com.xurebinhaBanking.model.account.AccountType;
-import br.com.xurebinhaBanking.model.account.Bank;
+import br.com.xurebinhaBanking.model.bank.Bank;
 import br.com.xurebinhaBanking.model.account.StatusAccount;
 
 import java.sql.ResultSet;

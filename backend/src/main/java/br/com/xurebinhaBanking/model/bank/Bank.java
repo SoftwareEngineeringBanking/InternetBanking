@@ -1,5 +1,6 @@
-package br.com.xurebinhaBanking.model.account;
+package br.com.xurebinhaBanking.model.bank;
 
+import br.com.xurebinhaBanking.model.bank.BankType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
