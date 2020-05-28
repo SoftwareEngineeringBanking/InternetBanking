@@ -68,24 +68,15 @@ public class ClientRepository {
                         rs.getString("name"),
                         rs.getString("cpf"),
                         rs.getString("password"),
-                        rs.getString("secondPassword"),
+                        rs.getString("second_password"),
                         findAccounts(rs.getInt("id"))
                 );
             }
 
-            /*
-private int id;
-    private String name;
-    private String cpf;
-    private String password;
-    private String secondPassword;
-    private List<Account> accountList;             */
-
         } catch (SQLException throwables) {
             throwables.printStackTrace();
-        } finally {
-            return null;
         }
+        return null;
     }
 
     private List<Account> findAccounts(int clientId) {
@@ -103,8 +94,8 @@ private int id;
                         rs.getBigDecimal("balance"),
                         rs.getBigDecimal("limit_account"),
                         StatusAccount.valueOf(rs.getString("status_account")),
-                        new AccountType(rs.getString("type_account")),
-                        new Bank(rs.getInt("bank"))));
+                        new AccountType(rs.getString("type_account")), //TODO buscar da lista do DB
+                        new Bank(rs.getInt("bank"))));//TODO buscar da lista do DB
 
             } catch (SQLException throwables) {
                 throwables.printStackTrace();
