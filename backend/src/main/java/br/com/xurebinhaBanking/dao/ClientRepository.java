@@ -27,6 +27,15 @@ public class ClientRepository {
         client.setId(id.intValue());
     }
 
+    public void changePasswordBd(Client client){
+        String sql = " UPDATE client "
+                   + "    SET password = '" + client.getPassword() + "', '"
+                   + "        second_password = '" + client.getPassword()
+                   + "  WHERE id = '" + client.getId();
+
+        conn.insertRegisterAndGetId(sql);
+    }
+
     public String listClients() {
 
         ResultSet rs = conn.consultarRegistros("SELECT * FROM client");
@@ -128,5 +137,20 @@ public class ClientRepository {
             throwables.printStackTrace();
         }
         return passwordOk;
+    }
+
+    public boolean secondPasswordOk(int idClient, String secondPassword) {
+        ResultSet rs = conn.consultarRegistros("SELECT (1) FROM client WHERE id= " + idClient + " AND second_password='" + secondPassword + "'");
+        boolean secondPasswordOk = false;
+        try {
+            if (rs.next()) {
+                secondPasswordOk = true;
+            }
+
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+
+        return secondPasswordOk;
     }
 }
