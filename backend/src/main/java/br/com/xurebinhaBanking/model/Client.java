@@ -1,20 +1,28 @@
 package br.com.xurebinhaBanking.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
-public class Client extends Account {
+@AllArgsConstructor
+@NoArgsConstructor
+public class Client{
+    private int id;
     private String name;
     private String cpf;
     private String password;
     private String secondPassword;
-    private Account account;
+    private List<Account> accountList;
 
-    public Client(String name, String cpf, String password, String secondPassword, Account account) {
+    public Client(String name,String cpf, String password, String secondPassword){
         this.name = name;
         this.cpf = cpf;
         this.password = password;
         this.secondPassword = secondPassword;
-        this.account = account;
+        this.accountList = new ArrayList<>();
     }
 }

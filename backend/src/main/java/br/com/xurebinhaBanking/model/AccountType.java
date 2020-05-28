@@ -12,4 +12,7 @@ public class AccountType {
     private int valuePerTransfer;
     private int limitWeekendDays;
     private int limitNormalDays;
+    public AccountType(String nameAccountType){
+        this.nameAccountType = nameAccountType;
+    }
 }

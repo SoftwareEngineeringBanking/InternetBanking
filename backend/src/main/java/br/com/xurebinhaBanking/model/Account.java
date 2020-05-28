@@ -10,6 +10,8 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Account {
+    private int id;
+    private int clientId;
     private int agency;
     private int number;
     private BigDecimal balance;
@@ -17,4 +19,16 @@ public class Account {
     private StatusAccount statusAccount;
     private AccountType accountType;
     private Bank bank;
+
+    public Account(int clientId, int agency, int number, BigDecimal balance, BigDecimal limitAccount,
+                   StatusAccount statusAccount, AccountType accountType, Bank bank){
+        this.clientId = clientId;
+        this.agency = agency;
+        this.number = number;
+        this.balance = balance;
+        this.limitAccount = limitAccount;
+        this.statusAccount = statusAccount;
+        this.accountType = accountType;
+        this.bank = bank;
+    }
 }
