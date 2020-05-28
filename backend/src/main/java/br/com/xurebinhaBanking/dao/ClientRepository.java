@@ -126,18 +126,6 @@ public class ClientRepository {
         }
         return passwordOk;
     }
-    public boolean secondPasswordOk(int idClient, String password) {
-        ResultSet rs = conn.consultarRegistros("SELECT (1) FROM client WHERE id= " + idClient + " AND second_password='" + password + "'");
-        boolean passwordOk = false;
-        try {
-            if (rs.next()) {
-                passwordOk = true;
-            }
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
-        return passwordOk;
-    }
 
     public boolean secondPasswordOk(int idClient, String secondPassword) {
         ResultSet rs = conn.consultarRegistros("SELECT (1) FROM client WHERE id= " + idClient + " AND second_password='" + secondPassword + "'");
