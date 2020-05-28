@@ -37,7 +37,7 @@ public class AccountRepository {
             try {
                 if (!rs.next()) break;
 
-                result += "COD:" + rs.getInt("id") + " BCO: " + rs.getString("bank") + "- AG: " + rs.getInt("agency") + "C/C: "
+                result += "COD:" + rs.getInt("id") + " BCO:" + rs.getString("bank") + " AG: " + rs.getInt("agency") + " C/C: "
                         + rs.getInt("number_account") + " - " + rs.getString("type_account") + "\n";
 
             } catch (SQLException throwables) {

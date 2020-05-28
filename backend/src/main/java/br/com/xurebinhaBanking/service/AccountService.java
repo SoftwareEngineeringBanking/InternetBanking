@@ -334,7 +334,7 @@ public class AccountService {
                 "4 - Fazer Emprestimo" + NOVA_LINHA +
                 "5 - Pagar Emprestimo" + NOVA_LINHA +
                 "6 - Atualizar Dados" + NOVA_LINHA +
-                "8 - Alterar senha" + NOVA_LINHA +
+                "7 - Alterar senha" + NOVA_LINHA +
                 "0 - Retornar ao Menu Inicial";
     }
 
