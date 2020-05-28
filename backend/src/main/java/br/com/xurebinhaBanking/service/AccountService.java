@@ -86,6 +86,9 @@ public class AccountService {
                     System.out.println("Atualizar dados");
                     updateAccount(client);
                     break;
+                case 5:
+                    changePassword(client);
+                    break;
                 case 0:
                 default:
                     FIM_MENU_CONTA = true;
@@ -235,23 +238,60 @@ public class AccountService {
         }
     }
 
-    private static String menu() {
-        return "---------------------------------" + NOVA_LINHA +
-                "----MENU DE CONTA DO CLIENTE----" + NOVA_LINHA +
-                "---------------------------------" + NOVA_LINHA +
-                "1 - Fazer Transferencia" + NOVA_LINHA +
-                "2 - Verificar Saldo" + NOVA_LINHA +
-                "3 - Pagar Contas" + NOVA_LINHA +
-                "4 - Atualizar Dados" + NOVA_LINHA +
-                //"4 - Informacoes de conta"+NOVA_LINHA+
-                "0 - Retornar ao Menu Inicial";
-    }
+        private void changePassword (Client client){
+            Scanner in = new Scanner(System.in);
+            System.out.println(client.getName() + " DIGITE SUA SENHA ATUAL: ");
+            String passwordClient = in.next();
+            boolean validaSenhaCliente = false;
 
-    private String menuAccount() {
-        return "---------------------------------" + NOVA_LINHA +
-                "----Atualizar dados----" + NOVA_LINHA +
-                "1 - Limite" + NOVA_LINHA +
-                "2 - Status" + NOVA_LINHA +
-                "0 - Atualizar";
+            do {
+                validaSenhaCliente = clientRepository.passwordOk(client.getId(), passwordClient);
+                if (!validaSenhaCliente) {
+                    System.out.println("Senha incorreta, tente novamente:");
+                    passwordClient = in.next();
+                }
+            } while (!validaSenhaCliente);
+
+            System.out.println(client.getName() + " DIGITE SUA SEGUNDA SENHA ATUAL: ");
+            String secondPasswordClient = in.next();
+            boolean validaSegundaSenhaCliente = false;
+            do {
+                validaSegundaSenhaCliente = clientRepository.secondPasswordOk(client.getId(), secondPasswordClient);
+                if (!validaSegundaSenhaCliente) {
+                    System.out.println("Senha incorreta, tente novamente:");
+                    secondPasswordClient = in.next();
+                }
+            } while (!validaSegundaSenhaCliente);
+
+            System.out.println("DIGITE SUA NOVA SENHA");
+            String newPasswordClient = in.next();
+
+            System.out.println("DIGITE SUA NOVA SEGUNDA SENHA");
+            String newSecondPasswordClient = in.next();
+
+            client.setPassword(newPasswordClient);
+            client.setSecondPassword(newSecondPasswordClient);
+
+            clientRepository.changePasswordBd(client);
+        }
+
+        private static String menu () {
+            return "---------------------------------" + NOVA_LINHA +
+                    "----MENU DE CONTA DO CLIENTE----" + NOVA_LINHA +
+                    "---------------------------------" + NOVA_LINHA +
+                    "1 - Fazer Transferencia" + NOVA_LINHA +
+                    "2 - Verificar Saldo" + NOVA_LINHA +
+                    "3 - Realizar Saque" + NOVA_LINHA +
+                    "4 - Atualizar Dados" + NOVA_LINHA +
+                    "5 - Alterar senha" + NOVA_LINHA +
+                    "0 - Retornar ao Menu Inicial";
+        }
+
+        private String menuAccount() {
+            return "---------------------------------" + NOVA_LINHA +
+                    "----Atualizar dados----" + NOVA_LINHA +
+                    "1 - Limite" + NOVA_LINHA +
+                    "2 - Status" + NOVA_LINHA +
+                    "0 - Atualizar";
+        }
     }
-}
