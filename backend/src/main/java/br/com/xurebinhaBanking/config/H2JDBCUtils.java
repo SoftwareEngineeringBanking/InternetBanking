@@ -24,6 +24,27 @@ public class H2JDBCUtils {
             printSQLException(e);
         }
     }
+    public void dropTable(String sqlDrop){
+        try {
+            stmt.executeUpdate(sqlDrop);
+        } catch (SQLException e) {
+            printSQLException(e);
+        }
+    }
+    public boolean existReg(String sqlExist) {
+        ResultSet rs = consultarRegistros(sqlExist);
+        boolean exist = false;
+        try {
+            if (rs.next()){
+                exist = true;
+            }
+
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+
+        return exist;
+    }
 
     public void inserirRegistro(String sqlInsert){
         try {
@@ -31,6 +52,19 @@ public class H2JDBCUtils {
         } catch (SQLException e) {
             printSQLException(e);
         }
+    }
+    public long insertRegisterAndGetId(String sqlInsert){
+        try {
+            stmt.executeUpdate(sqlInsert);
+
+            ResultSet generatedKeys = stmt.getGeneratedKeys();
+            if (generatedKeys.next()) {
+               return generatedKeys.getLong(1);
+            }
+        } catch (SQLException e) {
+            printSQLException(e);
+        }
+        return 0;
     }
 
     public void apagarRegistro(String sqlDelete){

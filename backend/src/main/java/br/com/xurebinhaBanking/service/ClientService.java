@@ -40,12 +40,14 @@ public class ClientService {
         int agency = in.nextInt();
         //todo validar escolha agencia
 
-        Account account = new Account(agency, generateNumAccount(), getDefaultBalance(),
-                getLimitAccount(), getDefaultStatusAccount(), getDefaultAccountType(), getDefaultBank());
-        Client client = new Client(name, cpf, password, secondPassword, account);
 
-        accountRepository.createAccount(account);
+        Client client = new Client(name, cpf, password, secondPassword);
         clientRepository.createClient(client);
+
+        Account account = new Account(client.getId(), agency, generateNumAccount(), getDefaultBalance(), getLimitAccount(), getDefaultStatusAccount(), getDefaultAccountType(), getDefaultBank());
+        client.getAccountList().add(account);
+        accountRepository.createAccount(account);
+
     }
 
     //todo listar e bucas dados de banco
