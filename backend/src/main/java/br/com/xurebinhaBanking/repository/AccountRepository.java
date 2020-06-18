@@ -1,10 +1,10 @@
-package br.com.xurebinhaBanking.dao;
+package br.com.xurebinhaBanking.repository;
 
 import br.com.xurebinhaBanking.config.H2JDBCUtils;
-import br.com.xurebinhaBanking.model.Account;
-import br.com.xurebinhaBanking.model.AccountType;
-import br.com.xurebinhaBanking.model.Bank;
-import br.com.xurebinhaBanking.model.StatusAccount;
+import br.com.xurebinhaBanking.model.account.Account;
+import br.com.xurebinhaBanking.model.account.AccountType;
+import br.com.xurebinhaBanking.model.bank.Bank;
+import br.com.xurebinhaBanking.model.account.StatusAccount;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -64,7 +64,7 @@ public class AccountRepository {
     }
 
     public Account findAccount(int selAccount) {
-        ResultSet rs = conn.consultarRegistros("SELECT * FROM client WHERE id= " + selAccount);
+        ResultSet rs = conn.consultarRegistros("SELECT * FROM account WHERE id= " + selAccount);
         try {
             if (rs.next()) {
                 new Account(rs.getInt("id"),
@@ -85,11 +85,14 @@ public class AccountRepository {
     }
 
     public void updateBalance(Account account){
-        conn.update("UPDATE account SET balance = " +account.getBalance()+ " WHERE id= " + account.getId());
+        conn.update("UPDATE account SET balance= " +account.getBalance()+ " WHERE id= " + account.getId());
     }
 
-    public void updateAccount(Account account) {
-        conn.update("UPDATE account SET limit_account = " +account.getLimitAccount()+ "," +
-                " status_account = " +account.getStatusAccount()+ " WHERE id= " + account.getId());
+    public void updateLimit(Account account) {
+        conn.update("UPDATE account SET limit_account= " +account.getLimitAccount()+ " WHERE id= " + account.getId());
+    }
+
+    public void updateNumber(Account account) {
+        conn.update("UPDATE account SET number_account= " +account.getNumber()+ " WHERE id= " + account.getId());
     }
 }

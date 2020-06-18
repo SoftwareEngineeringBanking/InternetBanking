@@ -1,6 +1,5 @@
 package br.com.xurebinhaBanking;
 
-import br.com.xurebinhaBanking.model.Client;
 import br.com.xurebinhaBanking.config.CreateTablesAndDefaultRegisters;
 import br.com.xurebinhaBanking.config.H2JDBCUtils;
 import br.com.xurebinhaBanking.service.AccountService;
@@ -23,7 +22,7 @@ public class XurebinhaBankingApplication {
         do {
             System.out.println(imprimeMenu());
             Scanner in = new Scanner(System.in);
-            System.out.println("Digite sua opcao:");
+            System.out.println("Digite sua Opção:");
             int opcao = in.nextInt();
 
             switch (opcao) {

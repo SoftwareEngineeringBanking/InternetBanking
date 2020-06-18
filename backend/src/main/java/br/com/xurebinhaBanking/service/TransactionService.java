@@ -1,9 +1,9 @@
 package br.com.xurebinhaBanking.service;
 
 import br.com.xurebinhaBanking.config.H2JDBCUtils;
-import br.com.xurebinhaBanking.dao.TransactionRepository;
-import br.com.xurebinhaBanking.model.Invoice;
-import br.com.xurebinhaBanking.model.TransactionType;
+import br.com.xurebinhaBanking.repository.TransactionRepository;
+import br.com.xurebinhaBanking.model.invoice.Invoice;
+import br.com.xurebinhaBanking.model.transaction.TransactionType;
 
 import java.sql.Date;
 import java.util.Calendar;

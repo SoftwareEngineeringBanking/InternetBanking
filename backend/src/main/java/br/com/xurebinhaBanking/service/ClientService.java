@@ -1,9 +1,14 @@
 package br.com.xurebinhaBanking.service;
 
 import br.com.xurebinhaBanking.config.H2JDBCUtils;
-import br.com.xurebinhaBanking.dao.AccountRepository;
-import br.com.xurebinhaBanking.dao.ClientRepository;
-import br.com.xurebinhaBanking.model.*;
+import br.com.xurebinhaBanking.model.account.Account;
+import br.com.xurebinhaBanking.model.account.AccountType;
+import br.com.xurebinhaBanking.model.account.StatusAccount;
+import br.com.xurebinhaBanking.model.bank.Bank;
+import br.com.xurebinhaBanking.model.bank.BankType;
+import br.com.xurebinhaBanking.model.client.Client;
+import br.com.xurebinhaBanking.repository.AccountRepository;
+import br.com.xurebinhaBanking.repository.ClientRepository;
 
 import java.math.BigDecimal;
 import java.util.Scanner;
@@ -52,7 +57,7 @@ public class ClientService {
 
     //todo listar e bucas dados de banco
     private static Bank getDefaultBank() {
-        return new Bank(0,"Xurebinha",BankType.INTERNAL);
+        return new Bank(0,"Xurebinha", BankType.INTERNAL);
     }
 
     //TODO mostrar lista de agencias

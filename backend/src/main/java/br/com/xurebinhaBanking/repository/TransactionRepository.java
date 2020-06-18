@@ -1,7 +1,7 @@
-package br.com.xurebinhaBanking.dao;
+package br.com.xurebinhaBanking.repository;
 
 import br.com.xurebinhaBanking.config.H2JDBCUtils;
-import br.com.xurebinhaBanking.model.TransactionType;
+import br.com.xurebinhaBanking.model.transaction.TransactionType;
 
 import java.math.BigDecimal;
 import java.sql.Date;

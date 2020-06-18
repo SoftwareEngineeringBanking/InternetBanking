@@ -1,7 +1,11 @@
-package br.com.xurebinhaBanking.dao;
+package br.com.xurebinhaBanking.repository;
 
 import br.com.xurebinhaBanking.config.H2JDBCUtils;
-import br.com.xurebinhaBanking.model.*;
+import br.com.xurebinhaBanking.model.account.Account;
+import br.com.xurebinhaBanking.model.account.AccountType;
+import br.com.xurebinhaBanking.model.account.StatusAccount;
+import br.com.xurebinhaBanking.model.bank.Bank;
+import br.com.xurebinhaBanking.model.client.Client;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
