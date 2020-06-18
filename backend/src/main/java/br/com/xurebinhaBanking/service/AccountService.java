@@ -31,8 +31,11 @@ public class AccountService {
         this.in = new Scanner(System.in);
     }
 
-    public void actionAccount() {
+    public AccountService() {
 
+    }
+
+    public void actionAccount() {
 
         System.out.println("---------- ACESSO A CONTA ------------");
         System.out.println("-------- Clientes cadastrados: ----------");
@@ -247,18 +250,17 @@ public class AccountService {
 
     private void updateAccount(Client client) {
         boolean finalize = false;
-        List accountsIds = new ArrayList();
+        List<Integer> accountsIds = new ArrayList<>();
 
         if (!client.getAccountList().isEmpty()) {
             client.getAccountList().forEach(account -> {
                 accountsIds.add(account.getId());
                 System.out.println("Conta id: " + account.getId());
             });
-            System.out.println("Selecione o id:" + accountsIds);
             System.out.println("Digite o id da conta: ");
             int accountId = in.nextInt();
 
-            Account account = accountRepository.findAccount(accountId);
+            Account account = client.getAccountList().get(0);
 
             do {
                 System.out.println(menuAccount());
@@ -270,15 +272,16 @@ public class AccountService {
                     case 1:
                         System.out.println("Digite o limite desejado:");
                         account.setLimitAccount(in.nextBigDecimal());
+                        accountRepository.updateLimit(account);
                         break;
                     case 2:
-                        System.out.println("Digite o status:");
-                        account.setStatusAccount(Enum.valueOf(StatusAccount.class, in.next()));
+                        System.out.println("Digite o número:");
+                        account.setNumber(in.nextInt());
+                        accountRepository.updateNumber(account);
                         break;
                     case 0:
                     default:
                         finalize = true;
-                        accountRepository.updateAccount(account);
                         break;
                 }
             } while (finalize);
@@ -324,7 +327,7 @@ public class AccountService {
         clientRepository.changePasswordBd(client);
     }
 
-    private static String menu() {
+    public static String menu() {
         return "---------------------------------" + NOVA_LINHA +
                 "----MENU DE CONTA DO CLIENTE----" + NOVA_LINHA +
                 "---------------------------------" + NOVA_LINHA +
@@ -338,11 +341,11 @@ public class AccountService {
                 "0 - Retornar ao Menu Inicial";
     }
 
-    private String menuAccount() {
+    public String menuAccount() {
         return "---------------------------------" + NOVA_LINHA +
                 "----Atualizar dados----" + NOVA_LINHA +
                 "1 - Limite" + NOVA_LINHA +
-                "2 - Status" + NOVA_LINHA +
+                "2 - Número" + NOVA_LINHA +
                 "0 - Atualizar";
     }
 
