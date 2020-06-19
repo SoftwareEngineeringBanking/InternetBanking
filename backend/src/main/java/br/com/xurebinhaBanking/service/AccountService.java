@@ -248,34 +248,24 @@ public class AccountService {
 
     private void updateAccount(Client client) {
         boolean finalize = false;
-        List<Integer> accountsIds = new ArrayList<>();
-
         if (!client.getAccountList().isEmpty()) {
-            client.getAccountList().forEach(account -> {
-                accountsIds.add(account.getId());
-                System.out.println("Conta id: " + account.getId());
-            });
-            System.out.println("Digite o id da conta: ");
-            int accountId = in.nextInt();
-
-            Account account = client.getAccountList().get(0);
+            Account selAccountOut = selectAccount(client);
 
             do {
                 System.out.println(menuAccount());
-
                 System.out.println("Digite sua opcao:");
                 int option = in.nextInt();
 
                 switch (option) {
                     case 1:
                         System.out.println("Digite o limite desejado:");
-                        account.setLimitAccount(in.nextBigDecimal());
-                        accountRepository.updateLimit(account);
+                        selAccountOut.setLimitAccount(in.nextBigDecimal());
+                        accountRepository.updateLimit(selAccountOut);
                         break;
                     case 2:
-                        System.out.println("Digite o número:");
-                        account.setNumber(in.nextInt());
-                        accountRepository.updateNumber(account);
+                        System.out.println("Digite o novo número da conta:");
+                        selAccountOut.setNumber(in.nextInt());
+                        accountRepository.updateNumber(selAccountOut);
                         break;
                     case 0:
                     default:
@@ -327,15 +317,15 @@ public class AccountService {
 
 
     private void accountDeposit(Client client) {
-        Account account = new Account();
         Scanner in = new Scanner(System.in);
-        System.out.println("Selecione o id da conta escolhida:");
-        account.setId(in.nextInt());
+        Account selAccountOut = selectAccount(client);
 
         System.out.println("Digite o valor do depósito:");
-        account.setBalance(new BigDecimal(in.nextInt()));
+        selAccountOut.setBalance(new BigDecimal(in.nextInt()));
 
-        accountRepository.updateBalance(account);
+        accountRepository.updateBalance(selAccountOut);
+
+        //todo setar transacao
     }
     
     public static String menu() {
@@ -353,17 +343,12 @@ public class AccountService {
                 "0 - Retornar ao Menu Inicial";
     }
 
-    public String menuBillet() {
-        return "---------------------------------" + NOVA_LINHA +
-                "----Pagar Boleto----" + NOVA_LINHA;
-    }
-
-    public String menuAccount() {
+    public static String menuAccount() {
         return "---------------------------------" + NOVA_LINHA +
                 "----Atualizar dados----" + NOVA_LINHA +
                 "1 - Limite" + NOVA_LINHA +
                 "2 - Número" + NOVA_LINHA +
-                "0 - Atualizar";
+                "0 - Voltar para o menu anterior!";
     }
 
 }
