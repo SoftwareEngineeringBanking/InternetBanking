@@ -33,9 +33,9 @@ public class ClientRepository {
 
     public void changePasswordBd(Client client){
         String sql = " UPDATE client "
-                   + "    SET password = '" + client.getPassword() + "', '"
-                   + "        second_password = '" + client.getPassword()
-                   + "  WHERE id = '" + client.getId();
+                   + "    SET password = '" + client.getPassword() + "',"
+                   + "        second_password = '" + client.getPassword() + "'"
+                   + "  WHERE id = '" + client.getId() + "'";
 
         conn.insertRegisterAndGetId(sql);
     }

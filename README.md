@@ -7,11 +7,13 @@
 - Felipe Wurth (felipewurch@gmail.com - felipewurch)
 - Crislaine Soares ( Crislainesoares)
 - Leo Miranda ( leomiranda1995@gmail.com - leomiranda1995)
+- Matheus Abreu ( matheus.la1999@gmail.com - matheussla)
 
 ### [Backend](https://github.com/xmacedo/XurebinhaBanking/tree/master/backend)
 ##### Tecnologias
 - Java
-- MongoDB
+- Sql
+- JUnit
 
 
 ### Canais
