@@ -20,9 +20,9 @@ public class ClientService {
     private final static int AGENCY_DEFAULT = 0001;
 
     public ClientService(H2JDBCUtils conn) {
-        this.conn = conn;
-        this.accountRepository = new AccountRepository(conn);
-        this.clientRepository = new ClientRepository(conn);
+        ClientService.conn = conn;
+        accountRepository = new AccountRepository(conn);
+        clientRepository = new ClientRepository(conn);
     }
 
     public static void createClientAccount(){
@@ -66,7 +66,7 @@ public class ClientService {
     }
     //todo criar lista de bancos
     //todo criar forma de gerar numero da conta
-    private static int generateNumAccount(){
+    public static int generateNumAccount(){
         return 0001;
     }
 

@@ -1,7 +1,7 @@
 package br.com.xurebinhaBanking;
 
 import br.com.xurebinhaBanking.model.account.Account;
-import br.com.xurebinhaBanking.service.AccountService;
+import br.com.xurebinhaBanking.model.menu.Menu;
 import br.com.xurebinhaBanking.model.account.StatusAccount;
 import org.junit.jupiter.api.Test;
 
@@ -20,12 +20,10 @@ public class AccountTest {
         assertNotNull(account);
         assertEquals(5582, account.getAgency());
         assertEquals(806789, account.getNumber());
-        assertEquals("ACTIVE", account.getStatusAccount());
     }
 
     @Test
     void testMenu() {
-        AccountService service = new AccountService();
         String NOVA_LINHA = "\n";
 
         String menu = "---------------------------------" + NOVA_LINHA +
@@ -41,20 +39,19 @@ public class AccountTest {
                 "8 - Alterar senha" + NOVA_LINHA +
                 "0 - Retornar ao Menu Inicial";
 
-        assertEquals(service.menu(), menu);
+        assertEquals(Menu.menu(), menu);
     }
 
     @Test
     void testMenuAccount() {
-        AccountService service = new AccountService();
         String NOVA_LINHA = "\n";
 
         String menuAccount = "---------------------------------" + NOVA_LINHA +
                 "----Atualizar dados----" + NOVA_LINHA +
                 "1 - Limite" + NOVA_LINHA +
-                "2 - Status" + NOVA_LINHA +
-                "0 - Atualizar";
+                "2 - Número" + NOVA_LINHA +
+                "0 - Voltar para o menu anterior!";
 
-        assertEquals(service.menuAccount(), menuAccount);
+        assertEquals(Menu.menuAccount(), menuAccount);
     }
 }
