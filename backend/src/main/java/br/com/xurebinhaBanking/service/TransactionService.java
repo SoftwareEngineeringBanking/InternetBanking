@@ -5,6 +5,7 @@ import br.com.xurebinhaBanking.repository.TransactionRepository;
 import br.com.xurebinhaBanking.model.invoice.Invoice;
 import br.com.xurebinhaBanking.model.transaction.TransactionType;
 
+import java.math.BigDecimal;
 import java.sql.Date;
 import java.util.Calendar;
 
@@ -21,5 +22,10 @@ public class TransactionService {
     public void createPaymentTransaction(int idAccountOut, Invoice invoice) {
         Date today = new java.sql.Date(Calendar.getInstance().getTimeInMillis());
         transactionRepository.createTransaction(TransactionType.PAYMENT, idAccountOut,0,invoice.getValue(), today);
+    }
+
+    public void createDepositTransaction(int idAccountIn, BigDecimal value) {
+        Date today = new java.sql.Date(Calendar.getInstance().getTimeInMillis());
+        transactionRepository.createTransaction(TransactionType.DEPOSIT, 0, idAccountIn, value, today);
     }
 }
