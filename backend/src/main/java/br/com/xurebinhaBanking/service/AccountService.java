@@ -338,8 +338,7 @@ public class AccountService {
 
         accountRepository.updateBalance(account);
     }
-
-
+    
     public static String menu() {
         return "---------------------------------" + NOVA_LINHA +
                 "----MENU DE CONTA DO CLIENTE----" + NOVA_LINHA +
