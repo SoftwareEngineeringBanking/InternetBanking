@@ -234,16 +234,7 @@ public class AccountService {
                         accountRepository.updateBalance(account);
                         account.setLimitAccount(account.getLimitAccount().subtract(valorEmprestimoSelected));
                         accountRepository.updateLimit(account);
-
-
-//                        Calendar c = Calendar.getInstance();
-//                        System.out.println("Data e Hora atual: "+c.getTime());
-
-                        for(int i=1; i<=parcelas; i++){
-
-                            //gerar a data
-                            transactionService.createLoanTransaction(account.getId(), valorParcelasSelected /*,data*/);
-                        }
+                        transactionService.createLoanTransaction(account.getId(), valorEmprestimoSelected);
 
 
                         System.out.println("Saldo atual da conta: R$ "+account.getBalance());

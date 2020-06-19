@@ -34,8 +34,8 @@ public class TransactionService {
         transactionRepository.createTransaction(TransactionType.LOAN, 0, idAccountIn, value, today);
     }
 
-    public void createTransferTransaction(int idAccountOut, int idAccountIn, BigDecimal value /*,Date dataParcela*/) {
-        Date dataParcela = new java.sql.Date(Calendar.getInstance().getTimeInMillis());
-        transactionRepository.createTransaction(TransactionType.TRANSFER, idAccountOut, idAccountIn, value, dataParcela);
+    public void createTransferTransaction(int idAccountOut, int idAccountIn, BigDecimal value) {
+        Date today = new java.sql.Date(Calendar.getInstance().getTimeInMillis());
+        transactionRepository.createTransaction(TransactionType.TRANSFER, idAccountOut, idAccountIn, value, today);
     }
 }
