@@ -9,6 +9,9 @@ import br.com.xurebinhaBanking.repository.AccountRepository;
 import br.com.xurebinhaBanking.repository.ClientRepository;
 
 import java.math.BigDecimal;
+import java.sql.Date;
+import java.text.DateFormat;
+import java.util.Calendar;
 import java.util.Scanner;
 
 public class AccountService {
@@ -60,9 +63,7 @@ public class AccountService {
                     payBills(client);
                     break;
                 case 5:
-                    //TODO ajustar
-                    System.out.println("-----FAZER EMPRESTIMO-----");
-                    System.out.println("Funcao ainda nao implementada!");
+                    makeLoan(client);
                     break;
                 case 6:
                     break;
@@ -171,6 +172,101 @@ public class AccountService {
 
     }
 
+    private void makeLoan(Client client){
+        boolean fimMenuMakeLoan = false;
+
+        System.out.println("-----FAZER EMPRESTIMO-----");
+        System.out.println("-----VENCIMENTO TODO DIA 1º-----");
+        Account account = selectAccount(client);
+        float loanLimit = account.getLimitAccount().floatValue();
+
+        do {
+            System.out.println("1 - SOLICITAR EMPRESTIMO");
+            System.out.println("0 - VOLTAR");
+            System.out.println("Digite sua Opção:");
+            int acao = in.nextInt();
+
+            switch (acao) {
+                case 1:
+                    if (loanLimit > 0) {
+                        float loanAmount;
+
+                        do {
+                            System.out.println("VALOR DISPONIVEL PARA EMPRÉSTIMO: R$ " + account.getLimitAccount());
+                            loanAmount = in.nextFloat();
+                        } while ((loanAmount > loanLimit) || (loanAmount < 1));
+
+                        int parcelas;
+                        do {
+                            System.out.println("OPCOES DE EMPRESTIMO PARA O VALOR R$ " + loanAmount);
+                            for (int i=1; i<4; i++){
+                                System.out.println(i + " - " + i + "x R$" + loanAmount/i);
+                            }
+                            System.out.println("0 - VOLTAR");
+
+                            System.out.println("SELECIONE UMA OPCAO");
+                            parcelas = in.nextInt();
+                        }while(parcelas < 1 || parcelas > 3);
+
+                        float valParcelas = loanAmount / parcelas;
+                        System.out.println("Valor selecionado: " + parcelas + "x de R$ " + valParcelas);
+
+                        System.out.println(client.getName() + " DIGITE SUA SEGUNDA SENHA PARA CONFIRMAR: ");
+                        String secondPasswordClient = in.next();
+                        boolean validaSegundaSenhaCliente = false;
+                        do {
+                            validaSegundaSenhaCliente = clientRepository.secondPasswordOk(client.getId(), secondPasswordClient);
+                            if (!validaSegundaSenhaCliente) {
+                                System.out.println("Senha incorreta, tente novamente:");
+                                secondPasswordClient = in.next();
+                            }
+                        } while (!validaSegundaSenhaCliente);
+
+                        String loanAmountReplace = String.valueOf(loanAmount);
+                        loanAmountReplace.replace(".",",");
+                        BigDecimal valorEmprestimoSelected = new BigDecimal(loanAmountReplace);
+
+                        String valParcelasReplace = String.valueOf(valParcelas);
+                        valParcelasReplace.replace(".",",");
+                        BigDecimal valorParcelasSelected = new BigDecimal(loanAmountReplace);
+
+                        account.setBalance(account.getBalance().add(valorEmprestimoSelected));
+                        accountRepository.updateBalance(account);
+                        account.setLimitAccount(account.getLimitAccount().subtract(valorEmprestimoSelected));
+                        accountRepository.updateLimit(account);
+
+
+//                        Calendar c = Calendar.getInstance();
+//                        System.out.println("Data e Hora atual: "+c.getTime());
+
+                        for(int i=1; i<=parcelas; i++){
+
+                            //gerar a data
+                            transactionService.createLoanTransaction(account.getId(), valorParcelasSelected /*,data*/);
+                        }
+
+
+                        System.out.println("Saldo atual da conta: R$ "+account.getBalance());
+                        System.out.println("Limite atual da conta: R$ "+account.getLimitAccount());
+                        System.out.println("-------------------------------");
+
+                    } else {
+                        System.out.println("CLIENTE NÃO POSSUI LIMITE PARA EMPRÉSTIMO");
+                        System.out.println("0 - VOLTAR");
+                        int opcao = in.nextInt();
+                        switch (opcao){
+                            default:
+                                fimMenuMakeLoan = true;
+                        }
+                    }
+                    break;
+                default:
+                    fimMenuMakeLoan = true;
+                    break;
+            }
+        } while (!fimMenuMakeLoan);
+    }
+
     //- Pagamento de contas (solicitando uma segunda senha e um código de barras válido em algum formato específico a escolher pelo grupo)
     //o valor é debitado da conta e a operação aparece no extrato
     private void payBills(Client client) {
@@ -183,7 +279,7 @@ public class AccountService {
         System.out.println("(00001190620200000000000010)");
         String codigoBarras = in.next();
 
-        boolean validaCodigoBarras = false;
+        /*boolean validaCodigoBarras = false;
         do {
             validaCodigoBarras = checkCode(codigoBarras);
             if (!validaCodigoBarras) {
@@ -191,7 +287,7 @@ public class AccountService {
                 codigoBarras = in.next();
                 //todo ajustar para sair, caso queira
             }
-        } while (!validaCodigoBarras);
+        } while (!validaCodigoBarras);*/
 
         Invoice invoice = new Invoice(codigoBarras);
         if (getAllFunds(selAccount).compareTo(invoice.getValue()) >= 1) {

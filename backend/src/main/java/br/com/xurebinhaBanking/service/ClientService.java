@@ -76,7 +76,7 @@ public class ClientService {
     }
     //todo buscar limite da conta com o tipo da conta
     private static BigDecimal getLimitAccount(){
-        return new BigDecimal(0);
+        return new BigDecimal(10000);
     }
 
     private static StatusAccount getDefaultStatusAccount(){
@@ -85,7 +85,7 @@ public class ClientService {
 
     //Todo validar tipo da conta e buscar o tipo da conta
     private static AccountType getDefaultAccountType(){
-        return new AccountType("PADRAO",0,0,0,0,0);
+        return new AccountType("PADRAO",100,100,1000000,1000000,1000000);
     }
 
 }
