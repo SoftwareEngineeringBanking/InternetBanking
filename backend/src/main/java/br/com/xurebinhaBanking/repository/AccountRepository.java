@@ -37,13 +37,15 @@ public class AccountRepository {
             try {
                 if (!rs.next()) break;
 
-                result += "COD:" + rs.getInt("id") + " BCO:" + rs.getString("bank") + " AG: " + rs.getInt("agency") + " C/C: "
-                        + rs.getInt("number_account") + " - " + rs.getString("type_account") + "\n";
-
+                result += "COD:" + rs.getInt("id") +
+                         " AG:" + rs.getInt("agency") +
+                         " C/C:"+ rs.getInt("number_account") +
+                         " (" + rs.getString("type_account") +
+                         ") Saldo: "+rs.getBigDecimal("balance") +
+                         " Limite:"+rs.getBigDecimal("limit_account")+"\n";
             } catch (SQLException throwables) {
                 throwables.printStackTrace();
             }
-
         }
         return result;
     }

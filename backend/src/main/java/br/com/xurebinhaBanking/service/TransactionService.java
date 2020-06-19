@@ -19,7 +19,7 @@ public class TransactionService {
     }
 
     public void createPaymentTransaction(int idAccountOut, Invoice invoice) {
-        Date today = (Date) Calendar.getInstance().getTime();
+        Date today = new java.sql.Date(Calendar.getInstance().getTimeInMillis());
         transactionRepository.createTransaction(TransactionType.PAYMENT, idAccountOut,0,invoice.getValue(), today);
     }
 }

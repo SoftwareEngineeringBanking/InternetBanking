@@ -55,12 +55,12 @@ public class AccountService {
         } while (!validaSelecaoCliente);
 
         validateFirstPassword(selClient);
-        //find on
-        Client client = clientRepository.findClient(selClient);
         do {
+            //find on
+            Client client = clientRepository.findClient(selClient);
             System.out.println(menu());
 
-            System.out.println("Digite sua opcao:");
+            System.out.println("Digite sua Opção:");
             int acao = in.nextInt();
 
             switch (acao) {
@@ -109,6 +109,20 @@ public class AccountService {
         } while (!validaSenhaCliente);
     }
 
+    private void validateSecondPassword(Client client) {
+        boolean validaSenhaCliente = false;
+        String secondPassClient = in.next();
+        System.out.println("Digite a SEGUNDA SENHA do usuario:");
+        do {
+            validaSenhaCliente = clientRepository.secondPasswordOk(client.getId(), secondPassClient);
+            if (!validaSenhaCliente) {
+                System.out.println("Segunda Senha do cliente '" + client.getId() + "' nao confere, tente novamente:");
+                secondPassClient = in.next();
+                //todo ajustar para sair, caso queira
+            }
+        } while (!validaSenhaCliente);
+        //validaSenhaCliente;
+    }
     /*
     - Transferência de valores (solicitando uma segunda senha de segurança e respeitando um limite definido pelo tipo de conta -
     universitária até 500 reais em dias de semana e 250 em todo o fim de semana, conta corrente padrão até 5000 reais em dias de
@@ -143,26 +157,71 @@ public class AccountService {
     }
 
     private void makeLoan(Client client){
+        boolean fimMenuMakeLoan = false;
+
         System.out.println("-----FAZER EMPRESTIMO-----");
         Account account = selectAccount(client);
-        int loanLimit = account.getLimitAccount().intValue();
+        float loanLimit = account.getLimitAccount().floatValue();
 
-        if (loanLimit > 0) {
-            int loanAmount;
-            do {
-                System.out.println("Valor disponível para empréstimo: R$ " + account.getLimitAccount());
-                loanAmount = in.nextInt();
-            } while ((loanAmount > loanLimit) || (loanAmount < 1));
+        do {
+            System.out.println("1 - SOLICITAR EMPRESTIMO");
+            System.out.println("0 - VOLTAR");
+            System.out.println("Digite sua Opção:");
+            int acao = in.nextInt();
 
-            loanAmount = 10;
+            switch (acao) {
+                case 1:
+                    if (loanLimit > 0) {
+                        float loanAmount;
+                        do {
+                            System.out.println("Valor disponível para empréstimo: R$ " + account.getLimitAccount());
+                            loanAmount = in.nextFloat();
+                        } while ((loanAmount > loanLimit) || (loanAmount < 1));
 
-            // questionar quantas vezes o cliente quer fazer, até 10
-            // apresentar para o usuário os valores a receber e pagar e gravar a transaction
-            // atualizar saldo e limite do cliente
-        } else {
-            // mensagem de sem limite para empréstimo
-            // mostrar menu para voltar
-        }
+                        int parcelas;
+                        do {
+                            System.out.println("OPCOES DE EMPRESTIMO PARA O VALOR R$ " + loanAmount);
+                            for (int i=1; i<4; i++){
+                                System.out.println(i + " - " + i + "x R$" + loanAmount/i);
+                            }
+                            System.out.println("0 - VOLTAR");
+
+                            System.out.println("SELECIONE UMA OPCAO");
+                            parcelas = in.nextInt();
+                        }while(parcelas < 1 || parcelas > 3);
+
+                        System.out.println("Valor selecionado: " + parcelas + "x de R$ " + loanAmount/parcelas);
+
+                        System.out.println(client.getName() + " DIGITE SUA SEGUNDA SENHA PARA CONFIRMAR: ");
+                        String secondPasswordClient = in.next();
+                        boolean validaSegundaSenhaCliente = false;
+                        do {
+                            validaSegundaSenhaCliente = clientRepository.secondPasswordOk(client.getId(), secondPasswordClient);
+                            if (!validaSegundaSenhaCliente) {
+                                System.out.println("Senha incorreta, tente novamente:");
+                                secondPasswordClient = in.next();
+                            }
+                        } while (!validaSegundaSenhaCliente);
+
+                        // questionar quantas vezes o cliente quer fazer, até 10
+                        // apresentar para o usuário os valores a receber e pagar e gravar a transaction
+                        // atualizar saldo e limite do cliente
+
+                    } else {
+                        System.out.println("Cliente não possui limite para empréstimo");
+                        System.out.println("0 - VOLTAR");
+                        int opcao = in.nextInt();
+                        switch (opcao){
+                            default:
+                                fimMenuMakeLoan = true;
+                        }
+                    }
+                    break;
+                default:
+                    fimMenuMakeLoan = true;
+                    break;
+            }
+        } while (!fimMenuMakeLoan);
     }
 
     //- Pagamento de contas (solicitando uma segunda senha e um código de barras válido em algum formato específico a escolher pelo grupo)
@@ -174,6 +233,7 @@ public class AccountService {
         Account selAccount = selectAccount(client);
 
         System.out.println("Digite um codigo de barras valido:");
+        System.out.println("(00001190620200000000000010)");
         String codigoBarras = in.next();
 
         /*boolean validaCodigoBarras = false;
@@ -192,29 +252,19 @@ public class AccountService {
             transactionService.createPaymentTransaction(selAccount.getId(), invoice);
 
             //debitar valor da conta
-            selAccount.getBalance().subtract(invoice.getValue());
+            selAccount.setBalance(selAccount.getBalance().subtract(invoice.getValue()));
 
             //Atualizar o saldo
             accountRepository.updateBalance(selAccount);
+            System.out.println("Conta Paga com sucesso!");
+            System.out.println("Codigo:   "+invoice.getId());
+            System.out.println(" Valor: R$"+invoice.getValue());
+            System.out.println("Saldo atual da conta: R$ "+selAccount.getBalance());
+            System.out.println("-------------------------------");
 
         } else {
             System.out.println("O cliente " + client.getName() + " não possui saldo suficiente!");
         }
-    }
-
-    private void validateSecondPassword(Client client) {
-        boolean validaSenhaCliente = false;
-        String secondPassClient = in.next();
-        System.out.println("Digite a SEGUNDA SENHA do usuario:");
-        do {
-            validaSenhaCliente = clientRepository.secondPasswordOk(client.getId(), secondPassClient);
-            if (!validaSenhaCliente) {
-                System.out.println("Segunda Senha do cliente '" + client.getId() + "' nao confere, tente novamente:");
-                secondPassClient = in.next();
-                //todo ajustar para sair, caso queira
-            }
-        } while (!validaSenhaCliente);
-        //validaSenhaCliente;
     }
 
     private Account selectAccount(Client client) {
@@ -270,34 +320,24 @@ public class AccountService {
 
     private void updateAccount(Client client) {
         boolean finalize = false;
-        List<Integer> accountsIds = new ArrayList<>();
-
         if (!client.getAccountList().isEmpty()) {
-            client.getAccountList().forEach(account -> {
-                accountsIds.add(account.getId());
-                System.out.println("Conta id: " + account.getId());
-            });
-            System.out.println("Digite o id da conta: ");
-            int accountId = in.nextInt();
-
-            Account account = client.getAccountList().get(0);
+            Account selAccountOut = selectAccount(client);
 
             do {
                 System.out.println(menuAccount());
-
                 System.out.println("Digite sua opcao:");
                 int option = in.nextInt();
 
                 switch (option) {
                     case 1:
                         System.out.println("Digite o limite desejado:");
-                        account.setLimitAccount(in.nextBigDecimal());
-                        accountRepository.updateLimit(account);
+                        selAccountOut.setLimitAccount(in.nextBigDecimal());
+                        accountRepository.updateLimit(selAccountOut);
                         break;
                     case 2:
-                        System.out.println("Digite o número:");
-                        account.setNumber(in.nextInt());
-                        accountRepository.updateNumber(account);
+                        System.out.println("Digite o novo número da conta:");
+                        selAccountOut.setNumber(in.nextInt());
+                        accountRepository.updateNumber(selAccountOut);
                         break;
                     case 0:
                     default:
@@ -349,15 +389,15 @@ public class AccountService {
 
 
     private void accountDeposit(Client client) {
-        Account account = new Account();
         Scanner in = new Scanner(System.in);
-        System.out.println("Selecione o id da conta escolhida:");
-        account.setId(in.nextInt());
+        Account selAccountOut = selectAccount(client);
 
         System.out.println("Digite o valor do depósito:");
-        account.setBalance(new BigDecimal(in.nextInt()));
+        selAccountOut.setBalance(new BigDecimal(in.nextInt()));
 
-        accountRepository.updateBalance(account);
+        accountRepository.updateBalance(selAccountOut);
+
+        //todo setar transacao
     }
     
     public static String menu() {
@@ -375,17 +415,12 @@ public class AccountService {
                 "0 - Retornar ao Menu Inicial";
     }
 
-    public String menuBillet() {
-        return "---------------------------------" + NOVA_LINHA +
-                "----Pagar Boleto----" + NOVA_LINHA;
-    }
-
-    public String menuAccount() {
+    public static String menuAccount() {
         return "---------------------------------" + NOVA_LINHA +
                 "----Atualizar dados----" + NOVA_LINHA +
                 "1 - Limite" + NOVA_LINHA +
                 "2 - Número" + NOVA_LINHA +
-                "0 - Atualizar";
+                "0 - Voltar para o menu anterior!";
     }
 
 }
