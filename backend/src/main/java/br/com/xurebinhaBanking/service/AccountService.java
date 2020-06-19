@@ -144,62 +144,24 @@ public class AccountService {
 
     private void makeLoan(Client client){
         System.out.println("-----FAZER EMPRESTIMO-----");
+        Account account = selectAccount(client);
+        int loanLimit = account.getLimitAccount().intValue();
 
-        boolean finalize = false;
-        List<Integer> accountsIds = new ArrayList<>();
-
-        if (!client.getAccountList().isEmpty()) {
-            client.getAccountList().forEach(account -> {
-                accountsIds.add(account.getId());
-                System.out.println("Conta id: " + account.getId());
-            });
-            System.out.println("Digite o id da conta: ");
-            int accountId = in.nextInt();
-
-            Account account = client.getAccountList().get(0);
-
-            System.out.println("Digite um valor dentro de seu limite de R$ " + account.getLimitAccount());
-            int loanAmount = in.nextInt();
-
-            int loanLimit = account.getLimitAccount().intValue();
-
-            while ((loanAmount > loanLimit) || (loanAmount < 1)){
-                System.out.println("Digite um valor dentro de seu limite: ");
+        if (loanLimit > 0) {
+            int loanAmount;
+            do {
+                System.out.println("Valor disponível para empréstimo: R$ " + account.getLimitAccount());
                 loanAmount = in.nextInt();
-            }
+            } while ((loanAmount > loanLimit) || (loanAmount < 1));
 
-
+            loanAmount = 10;
 
             // questionar quantas vezes o cliente quer fazer, até 10
-            // pegar os valores solicitados, executar uma taxa de juros simples
             // apresentar para o usuário os valores a receber e pagar e gravar a transaction
-            // atualizar saldo do cliente
-
-            do {
-                    System.out.println(menuAccount());
-
-                    System.out.println("Digite sua opcao:");
-                    int option = in.nextInt();
-
-                    switch (option) {
-                        case 1:
-                            System.out.println("Digite o limite desejado:");
-                    account.setLimitAccount(in.nextBigDecimal());
-                    accountRepository.updateLimit(account);
-                    break;
-                case 2:
-                    System.out.println("Digite o número:");
-                    account.setNumber(in.nextInt());
-                    accountRepository.updateNumber(account);
-                    break;
-                case 0:
-                default:
-                    finalize = true;
-                    break;
-                }
-            } while (finalize);
+            // atualizar saldo e limite do cliente
         } else {
-            System.out.println("Este cliente não tem contas cadastradas.");
+            // mensagem de sem limite para empréstimo
+            // mostrar menu para voltar
         }
     }
 
