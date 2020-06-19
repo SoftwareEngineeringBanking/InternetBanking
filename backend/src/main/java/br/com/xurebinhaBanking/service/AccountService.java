@@ -77,9 +77,7 @@ public class AccountService {
                     payBills(client);
                     break;
                 case 5:
-                    //TODO ajustar
-                    System.out.println("-----FAZER EMPRESTIMO-----");
-                    System.out.println("Funcao ainda nao implementada!");
+                    makeLoan(client);
                     break;
                 case 6:
                     break;
@@ -144,6 +142,67 @@ public class AccountService {
 
     }
 
+    private void makeLoan(Client client){
+        System.out.println("-----FAZER EMPRESTIMO-----");
+
+        boolean finalize = false;
+        List<Integer> accountsIds = new ArrayList<>();
+
+        if (!client.getAccountList().isEmpty()) {
+            client.getAccountList().forEach(account -> {
+                accountsIds.add(account.getId());
+                System.out.println("Conta id: " + account.getId());
+            });
+            System.out.println("Digite o id da conta: ");
+            int accountId = in.nextInt();
+
+            Account account = client.getAccountList().get(0);
+
+            System.out.println("Digite um valor dentro de seu limite de R$ " + account.getLimitAccount());
+            int loanAmount = in.nextInt();
+
+            int loanLimit = account.getLimitAccount().intValue();
+
+            while ((loanAmount > loanLimit) || (loanAmount < 1)){
+                System.out.println("Digite um valor dentro de seu limite: ");
+                loanAmount = in.nextInt();
+            }
+
+
+
+            // questionar quantas vezes o cliente quer fazer, até 10
+            // pegar os valores solicitados, executar uma taxa de juros simples
+            // apresentar para o usuário os valores a receber e pagar e gravar a transaction
+            // atualizar saldo do cliente
+
+            do {
+                    System.out.println(menuAccount());
+
+                    System.out.println("Digite sua opcao:");
+                    int option = in.nextInt();
+
+                    switch (option) {
+                        case 1:
+                            System.out.println("Digite o limite desejado:");
+                    account.setLimitAccount(in.nextBigDecimal());
+                    accountRepository.updateLimit(account);
+                    break;
+                case 2:
+                    System.out.println("Digite o número:");
+                    account.setNumber(in.nextInt());
+                    accountRepository.updateNumber(account);
+                    break;
+                case 0:
+                default:
+                    finalize = true;
+                    break;
+                }
+            } while (finalize);
+        } else {
+            System.out.println("Este cliente não tem contas cadastradas.");
+        }
+    }
+
     //- Pagamento de contas (solicitando uma segunda senha e um código de barras válido em algum formato específico a escolher pelo grupo)
     //o valor é debitado da conta e a operação aparece no extrato
     private void payBills(Client client) {
@@ -155,7 +214,7 @@ public class AccountService {
         System.out.println("Digite um codigo de barras valido:");
         String codigoBarras = in.next();
 
-        boolean validaCodigoBarras = false;
+        /*boolean validaCodigoBarras = false;
         do {
             validaCodigoBarras = checkCode(codigoBarras);
             if (!validaCodigoBarras) {
@@ -163,7 +222,7 @@ public class AccountService {
                 codigoBarras = in.next();
                 //todo ajustar para sair, caso queira
             }
-        } while (!validaCodigoBarras);
+        } while (!validaCodigoBarras);*/
 
         Invoice invoice = new Invoice(codigoBarras);
         if (getAllFunds(selAccount).compareTo(invoice.getValue()) >= 1) {
