@@ -6,7 +6,6 @@ import br.com.xurebinhaBanking.repository.ClientRepository;
 import br.com.xurebinhaBanking.model.account.Account;
 import br.com.xurebinhaBanking.model.client.Client;
 import br.com.xurebinhaBanking.model.invoice.Invoice;
-import br.com.xurebinhaBanking.model.account.StatusAccount;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -80,9 +79,6 @@ public class AccountService {
                     System.out.println("Funcao ainda nao implementada!");
                     break;
                 case 5:
-                    //TODO ajustar
-                    System.out.println("-----PAGAR EMPRESTIMO-----");
-                    System.out.println("Funcao ainda nao implementada!");
                     break;
                 case 6:
                     updateAccount(client);
@@ -339,6 +335,11 @@ public class AccountService {
                 "6 - Atualizar Dados" + NOVA_LINHA +
                 "7 - Alterar senha" + NOVA_LINHA +
                 "0 - Retornar ao Menu Inicial";
+    }
+
+    public String menuBillet() {
+        return "---------------------------------" + NOVA_LINHA +
+                "----Pagar Boleto----" + NOVA_LINHA;
     }
 
     public String menuAccount() {
