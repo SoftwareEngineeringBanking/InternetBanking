@@ -160,6 +160,7 @@ public class AccountService {
         boolean fimMenuMakeLoan = false;
 
         System.out.println("-----FAZER EMPRESTIMO-----");
+        System.out.println("-----VENCIMENTO TODO DIA 1º-----");
         Account account = selectAccount(client);
         float loanLimit = account.getLimitAccount().floatValue();
 
@@ -173,8 +174,9 @@ public class AccountService {
                 case 1:
                     if (loanLimit > 0) {
                         float loanAmount;
+
                         do {
-                            System.out.println("Valor disponível para empréstimo: R$ " + account.getLimitAccount());
+                            System.out.println("VALOR DISPONIVEL PARA EMPRÉSTIMO: R$ " + account.getLimitAccount());
                             loanAmount = in.nextFloat();
                         } while ((loanAmount > loanLimit) || (loanAmount < 1));
 
@@ -190,7 +192,8 @@ public class AccountService {
                             parcelas = in.nextInt();
                         }while(parcelas < 1 || parcelas > 3);
 
-                        System.out.println("Valor selecionado: " + parcelas + "x de R$ " + loanAmount/parcelas);
+                        float valParcelas = loanAmount / parcelas;
+                        System.out.println("Valor selecionado: " + parcelas + "x de R$ " + valParcelas);
 
                         System.out.println(client.getName() + " DIGITE SUA SEGUNDA SENHA PARA CONFIRMAR: ");
                         String secondPasswordClient = in.next();
@@ -203,12 +206,27 @@ public class AccountService {
                             }
                         } while (!validaSegundaSenhaCliente);
 
-                        // questionar quantas vezes o cliente quer fazer, até 10
-                        // apresentar para o usuário os valores a receber e pagar e gravar a transaction
-                        // atualizar saldo e limite do cliente
+                        String loanAmountReplace = String.valueOf(loanAmount);
+                        loanAmountReplace.replace(".",",");
+                        BigDecimal valorEmprestimoSelected = new BigDecimal(loanAmountReplace);
+
+                        String valParcelasReplace = String.valueOf(valParcelas);
+                        valParcelasReplace.replace(".",",");
+                        BigDecimal valorParcelasSelected = new BigDecimal(loanAmountReplace);
+
+                        account.setBalance(account.getBalance().add(valorEmprestimoSelected));
+                        accountRepository.updateBalance(account);
+                        account.setLimitAccount(account.getLimitAccount().subtract(valorEmprestimoSelected));
+                        accountRepository.updateLimit(account);
+
+//                        transactionService.createDepositTransaction(account.getId(), valorParcelasSelected);
+
+                        System.out.println("Saldo atual da conta: R$ "+account.getBalance());
+                        System.out.println("Limite atual da conta: R$ "+account.getLimitAccount());
+                        System.out.println("-------------------------------");
 
                     } else {
-                        System.out.println("Cliente não possui limite para empréstimo");
+                        System.out.println("CLIENTE NÃO POSSUI LIMITE PARA EMPRÉSTIMO");
                         System.out.println("0 - VOLTAR");
                         int opcao = in.nextInt();
                         switch (opcao){
