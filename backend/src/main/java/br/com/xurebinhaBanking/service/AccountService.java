@@ -167,6 +167,7 @@ public class AccountService {
         Account selAccount = selectAccount(client);
 
         System.out.println("Digite um codigo de barras valido:");
+        System.out.println("(00001190620200000000000010)");
         String codigoBarras = in.next();
 
         boolean validaCodigoBarras = false;
@@ -185,10 +186,15 @@ public class AccountService {
             transactionService.createPaymentTransaction(selAccount.getId(), invoice);
 
             //debitar valor da conta
-            selAccount.getBalance().subtract(invoice.getValue());
+            selAccount.setBalance(selAccount.getBalance().subtract(invoice.getValue()));
 
             //Atualizar o saldo
             accountRepository.updateBalance(selAccount);
+            System.out.println("Conta Paga com sucesso!");
+            System.out.println("Codigo:   "+invoice.getId());
+            System.out.println(" Valor: R$"+invoice.getValue());
+            System.out.println("Saldo atual da conta: R$ "+selAccount.getBalance());
+            System.out.println("-------------------------------");
 
         } else {
             System.out.println("O cliente " + client.getName() + " não possui saldo suficiente!");

@@ -18,8 +18,8 @@ public class TransactionRepository {
                 "VALUES ('" + payment.toString() + "', " +
                 idAccountOut + ", " +
                 idAccountIn + "," +
-                value + "," +
-                today + "," + "')";
+                value + ",'" +
+                today + "')";
         conn.inserirRegistro(sql);
     }
 

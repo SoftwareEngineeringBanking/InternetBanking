@@ -17,6 +17,7 @@ public class Invoice {
 
     public Invoice(String codeBar){
         //11111DDMMAAAA3333333333333
+        //00001190620200000000000010
         //11111 = identificador
         //DDMMAAAA = data vencimento
         //3333333333333 = valor 333.333.333.333,33
