@@ -55,12 +55,12 @@ public class AccountService {
         } while (!validaSelecaoCliente);
 
         validateFirstPassword(selClient);
-        //find on
-        Client client = clientRepository.findClient(selClient);
         do {
+            //find on
+            Client client = clientRepository.findClient(selClient);
             System.out.println(menu());
 
-            System.out.println("Digite sua opcao:");
+            System.out.println("Digite sua Opção:");
             int acao = in.nextInt();
 
             switch (acao) {
