@@ -1,15 +1,13 @@
 package br.com.xurebinhaBanking.service;
 
 import br.com.xurebinhaBanking.config.H2JDBCUtils;
-import br.com.xurebinhaBanking.repository.AccountRepository;
-import br.com.xurebinhaBanking.repository.ClientRepository;
 import br.com.xurebinhaBanking.model.account.Account;
 import br.com.xurebinhaBanking.model.client.Client;
 import br.com.xurebinhaBanking.model.invoice.Invoice;
+import br.com.xurebinhaBanking.repository.AccountRepository;
+import br.com.xurebinhaBanking.repository.ClientRepository;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
 
 public class AccountService {
@@ -42,18 +40,7 @@ public class AccountService {
         System.out.println(listCLients);
         System.out.println("Digite o ID do usuario que deseja:");
 
-        boolean validaSelecaoCliente = false;
-        int selClient = in.nextInt();
-        do {
-            validaSelecaoCliente = clientRepository.existClient(selClient);
-            if (!validaSelecaoCliente) {
-                System.out.println("Cliente nao encontrado, selecione outro:");
-                System.out.println(listCLients);
-                selClient = in.nextInt();
-                //todo ajustar para sair, caso queira
-            }
-        } while (!validaSelecaoCliente);
-
+        int selClient = validateSelectClient(listCLients);
         validateFirstPassword(selClient);
         do {
             //find on
@@ -95,6 +82,21 @@ public class AccountService {
         } while (!FIM_MENU_CONTA);
     }
 
+    private int validateSelectClient(String listCLients) {
+        boolean validaSelecaoCliente = false;
+        int selClient = in.nextInt();
+        do {
+            validaSelecaoCliente = clientRepository.existClient(selClient);
+            if (!validaSelecaoCliente) {
+                System.out.println("Cliente nao encontrado, selecione outro:");
+                System.out.println(listCLients);
+                selClient = in.nextInt();
+                //todo ajustar para sair, caso queira
+            }
+        } while (!validaSelecaoCliente);
+        return selClient;
+    }
+
     private void validateFirstPassword(int selClient) {
         boolean validaSenhaCliente = false;
         System.out.println("Digite a Senha do usuario:");
@@ -111,8 +113,9 @@ public class AccountService {
 
     private void validateSecondPassword(Client client) {
         boolean validaSenhaCliente = false;
-        String secondPassClient = in.next();
         System.out.println("Digite a SEGUNDA SENHA do usuario:");
+        String secondPassClient = in.next();
+
         do {
             validaSenhaCliente = clientRepository.secondPasswordOk(client.getId(), secondPassClient);
             if (!validaSenhaCliente) {
@@ -121,8 +124,8 @@ public class AccountService {
                 //todo ajustar para sair, caso queira
             }
         } while (!validaSenhaCliente);
-        //validaSenhaCliente;
     }
+
     /*
     - Transferência de valores (solicitando uma segunda senha de segurança e respeitando um limite definido pelo tipo de conta -
     universitária até 500 reais em dias de semana e 250 em todo o fim de semana, conta corrente padrão até 5000 reais em dias de
@@ -137,22 +140,36 @@ public class AccountService {
         System.out.println("Para a transferencia selecione a conta origem:");
         Account selAccountOut = selectAccount(client);
         System.out.println("Selecione o cliente destino:");
-
-        boolean validaSelecaoClienteDestino = false;
-        int selClientDest = in.nextInt();
-        do {
-            validaSelecaoClienteDestino = clientRepository.existClient(selClientDest);
-            if (!validaSelecaoClienteDestino) {
-                System.out.println("Cliente nao encontrado, selecione outro:");
-                System.out.println(listCLients);
-                selClientDest = in.nextInt();
-                //todo ajustar para sair, caso queira
-            }
-        } while (!validaSelecaoClienteDestino);
-
+        System.out.println(listCLients);
+        int selClientDest = validateSelectClient(listCLients);
         Client clientDest = clientRepository.findClient(selClientDest);
+        Account selAccountIn = selectAccount(clientDest);
+        //todo
 
-        System.out.println("Funcao ainda nao terminada");
+        System.out.println("Digite o valor de transferencia:");
+        String valor = in.next();
+        valor.replace(".", ",");
+        BigDecimal valueToTransfer = new BigDecimal(valor);
+
+        if (getAllFunds(selAccountOut).compareTo(valueToTransfer) >= 1) {
+            transactionService.createTransferTransaction(selAccountOut.getId(), selAccountIn.getId(), valueToTransfer);
+
+            //debitar valor da conta
+            selAccountOut.setBalance(selAccountOut.getBalance().subtract(valueToTransfer));
+            accountRepository.updateBalance(selAccountOut);
+            //aumentar na conta destino
+            selAccountIn.setBalance(selAccountIn.getBalance().add(valueToTransfer));
+            accountRepository.updateBalance(selAccountIn);
+
+            System.out.println("Valor transferido com sucesso!");
+            System.out.println("Conta Origem:   " + selAccountOut.getAgency()+"/"+selAccountOut.getNumber());
+            System.out.println(" Valor: R$" + valueToTransfer);
+            System.out.println("Saldo atual da conta: R$ " + selAccountOut.getBalance());
+            System.out.println("-------------------------------");
+
+        } else {
+            System.out.println("O cliente " + client.getName() + " não possui saldo suficiente!");
+        }
 
     }
 
@@ -275,9 +292,9 @@ public class AccountService {
             //Atualizar o saldo
             accountRepository.updateBalance(selAccount);
             System.out.println("Conta Paga com sucesso!");
-            System.out.println("Codigo:   "+invoice.getId());
-            System.out.println(" Valor: R$"+invoice.getValue());
-            System.out.println("Saldo atual da conta: R$ "+selAccount.getBalance());
+            System.out.println("Codigo:   " + invoice.getId());
+            System.out.println(" Valor: R$" + invoice.getValue());
+            System.out.println("Saldo atual da conta: R$ " + selAccount.getBalance());
             System.out.println("-------------------------------");
 
         } else {
@@ -405,24 +422,23 @@ public class AccountService {
         clientRepository.changePasswordBd(client);
     }
 
-
     private void accountDeposit(Client client) {
         Scanner in = new Scanner(System.in);
         Account selAccount = selectAccount(client);
 
         System.out.println("Digite o valor do depósito:");
         String valor = in.next();
-        valor.replace(".",",");
+        valor.replace(".", ",");
         BigDecimal valueToDeposit = new BigDecimal(valor);
 
         selAccount.setBalance(selAccount.getBalance().add(valueToDeposit));
 
         accountRepository.updateBalance(selAccount);
         transactionService.createDepositTransaction(selAccount.getId(), valueToDeposit);
-        System.out.println("Saldo atual da conta: R$ "+selAccount.getBalance());
+        System.out.println("Saldo atual da conta: R$ " + selAccount.getBalance());
         System.out.println("-------------------------------");
     }
-    
+
     public static String menu() {
         return "---------------------------------" + NOVA_LINHA +
                 "----MENU DE CONTA DO CLIENTE----" + NOVA_LINHA +
