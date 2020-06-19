@@ -8,6 +8,9 @@ import br.com.xurebinhaBanking.repository.AccountRepository;
 import br.com.xurebinhaBanking.repository.ClientRepository;
 
 import java.math.BigDecimal;
+import java.sql.Date;
+import java.text.DateFormat;
+import java.util.Calendar;
 import java.util.Scanner;
 
 public class AccountService {
@@ -236,7 +239,16 @@ public class AccountService {
                         account.setLimitAccount(account.getLimitAccount().subtract(valorEmprestimoSelected));
                         accountRepository.updateLimit(account);
 
-//                        transactionService.createDepositTransaction(account.getId(), valorParcelasSelected);
+
+//                        Calendar c = Calendar.getInstance();
+//                        System.out.println("Data e Hora atual: "+c.getTime());
+
+                        for(int i=1; i<=parcelas; i++){
+
+                            //gerar a data
+                            transactionService.createLoanTransaction(account.getId(), valorParcelasSelected /*,data*/);
+                        }
+
 
                         System.out.println("Saldo atual da conta: R$ "+account.getBalance());
                         System.out.println("Limite atual da conta: R$ "+account.getLimitAccount());
