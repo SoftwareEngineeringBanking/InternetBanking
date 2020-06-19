@@ -68,22 +68,25 @@ public class AccountService {
                     makeTransfer(client, listCLients);
                     break;
                 case 2:
-                    viewBalance(client);
+                    //Deposito
                     break;
                 case 3:
-                    payBills(client);
+                    viewBalance(client);
                     break;
                 case 4:
+                    payBills(client);
+                    break;
+                case 5:
                     //TODO ajustar
                     System.out.println("-----FAZER EMPRESTIMO-----");
                     System.out.println("Funcao ainda nao implementada!");
                     break;
-                case 5:
-                    break;
                 case 6:
-                    updateAccount(client);
                     break;
                 case 7:
+                    updateAccount(client);
+                    break;
+                case 8:
                     changePassword(client);
                     break;
                 case 0:
@@ -328,12 +331,13 @@ public class AccountService {
                 "----MENU DE CONTA DO CLIENTE----" + NOVA_LINHA +
                 "---------------------------------" + NOVA_LINHA +
                 "1 - Fazer Transferencia" + NOVA_LINHA +
-                "2 - Verificar Saldo" + NOVA_LINHA +
-                "3 - Pagar Conta " + NOVA_LINHA +
-                "4 - Fazer Emprestimo" + NOVA_LINHA +
-                "5 - Pagar Emprestimo" + NOVA_LINHA +
-                "6 - Atualizar Dados" + NOVA_LINHA +
-                "7 - Alterar senha" + NOVA_LINHA +
+                "2 - Fazer Depósito" + NOVA_LINHA +
+                "3 - Verificar Saldo" + NOVA_LINHA +
+                "4 - Pagar Conta " + NOVA_LINHA +
+                "5 - Fazer Emprestimo" + NOVA_LINHA +
+                "6 - Pagar Emprestimo" + NOVA_LINHA +
+                "7 - Atualizar Dados" + NOVA_LINHA +
+                "8 - Alterar senha" + NOVA_LINHA +
                 "0 - Retornar ao Menu Inicial";
     }
 
