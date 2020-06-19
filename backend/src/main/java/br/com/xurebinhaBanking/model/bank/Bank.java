@@ -14,5 +14,6 @@ public class Bank {
     private BankType bankType;
     public Bank(int cod){
         this.cod = cod;
+        this.name="Xu Banking";
     }
 }
