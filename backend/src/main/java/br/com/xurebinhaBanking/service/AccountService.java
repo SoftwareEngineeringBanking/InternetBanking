@@ -68,7 +68,7 @@ public class AccountService {
                     makeTransfer(client, listCLients);
                     break;
                 case 2:
-                    //Deposito
+                    accountDeposit(client);
                     break;
                 case 3:
                     viewBalance(client);
@@ -325,6 +325,20 @@ public class AccountService {
 
         clientRepository.changePasswordBd(client);
     }
+
+
+    private void accountDeposit(Client client) {
+        Account account = new Account();
+        Scanner in = new Scanner(System.in);
+        System.out.println("Selecione o id da conta escolhida:");
+        account.setId(in.nextInt());
+
+        System.out.println("Digite o valor do depósito:");
+        account.setBalance(new BigDecimal(in.nextInt()));
+
+        accountRepository.updateBalance(account);
+    }
+
 
     public static String menu() {
         return "---------------------------------" + NOVA_LINHA +
