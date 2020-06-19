@@ -390,14 +390,19 @@ public class AccountService {
 
     private void accountDeposit(Client client) {
         Scanner in = new Scanner(System.in);
-        Account selAccountOut = selectAccount(client);
+        Account selAccount = selectAccount(client);
 
         System.out.println("Digite o valor do depósito:");
-        selAccountOut.setBalance(new BigDecimal(in.nextInt()));
+        String valor = in.next();
+        valor.replace(".",",");
+        BigDecimal valueToDeposit = new BigDecimal(valor);
 
-        accountRepository.updateBalance(selAccountOut);
+        selAccount.setBalance(selAccount.getBalance().add(valueToDeposit));
 
-        //todo setar transacao
+        accountRepository.updateBalance(selAccount);
+        transactionService.createDepositTransaction(selAccount.getId(), valueToDeposit);
+        System.out.println("Saldo atual da conta: R$ "+selAccount.getBalance());
+        System.out.println("-------------------------------");
     }
     
     public static String menu() {
