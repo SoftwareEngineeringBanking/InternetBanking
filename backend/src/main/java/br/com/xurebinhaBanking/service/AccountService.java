@@ -111,6 +111,20 @@ public class AccountService {
         } while (!validaSenhaCliente);
     }
 
+    private void validateSecondPassword(Client client) {
+        boolean validaSenhaCliente = false;
+        String secondPassClient = in.next();
+        System.out.println("Digite a SEGUNDA SENHA do usuario:");
+        do {
+            validaSenhaCliente = clientRepository.secondPasswordOk(client.getId(), secondPassClient);
+            if (!validaSenhaCliente) {
+                System.out.println("Segunda Senha do cliente '" + client.getId() + "' nao confere, tente novamente:");
+                secondPassClient = in.next();
+                //todo ajustar para sair, caso queira
+            }
+        } while (!validaSenhaCliente);
+        //validaSenhaCliente;
+    }
     /*
     - Transferência de valores (solicitando uma segunda senha de segurança e respeitando um limite definido pelo tipo de conta -
     universitária até 500 reais em dias de semana e 250 em todo o fim de semana, conta corrente padrão até 5000 reais em dias de
@@ -179,21 +193,6 @@ public class AccountService {
         } else {
             System.out.println("O cliente " + client.getName() + " não possui saldo suficiente!");
         }
-    }
-
-    private void validateSecondPassword(Client client) {
-        boolean validaSenhaCliente = false;
-        String secondPassClient = in.next();
-        System.out.println("Digite a SEGUNDA SENHA do usuario:");
-        do {
-            validaSenhaCliente = clientRepository.secondPasswordOk(client.getId(), secondPassClient);
-            if (!validaSenhaCliente) {
-                System.out.println("Segunda Senha do cliente '" + client.getId() + "' nao confere, tente novamente:");
-                secondPassClient = in.next();
-                //todo ajustar para sair, caso queira
-            }
-        } while (!validaSenhaCliente);
-        //validaSenhaCliente;
     }
 
     private Account selectAccount(Client client) {
