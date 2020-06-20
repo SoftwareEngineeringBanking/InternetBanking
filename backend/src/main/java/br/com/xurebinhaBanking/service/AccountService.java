@@ -48,7 +48,7 @@ public class AccountService {
 
             System.out.println("Digite sua Opção:");
             int acao = in.nextInt();
-
+            FIM_MENU_CONTA = false;
             switch (acao) {
                 case 1:
                     makeTransfer(client, listCLients);
@@ -58,6 +58,7 @@ public class AccountService {
                     break;
                 case 3:
                     viewBalance(client);
+
                     break;
                 case 4:
                     payBills(client);
@@ -270,7 +271,7 @@ public class AccountService {
         System.out.println("(00001190620200000000000010)");
         String codigoBarras = in.next();
 
-        /*boolean validaCodigoBarras = false;
+        boolean validaCodigoBarras = false;
         do {
             validaCodigoBarras = checkCode(codigoBarras);
             if (!validaCodigoBarras) {
@@ -278,7 +279,7 @@ public class AccountService {
                 codigoBarras = in.next();
                 //todo ajustar para sair, caso queira
             }
-        } while (!validaCodigoBarras);*/
+        } while (!validaCodigoBarras);
 
         Invoice invoice = new Invoice(codigoBarras);
         if (getAllFunds(selAccount).compareTo(invoice.getValue()) >= 1) {
@@ -428,7 +429,7 @@ public class AccountService {
 
         System.out.println("Digite o valor do depósito:");
         String valor = in.next();
-        valor.replace(".", ",");
+        valor = valor.replace(",", ".");
         BigDecimal valueToDeposit = new BigDecimal(valor);
 
         selAccount.setBalance(selAccount.getBalance().add(valueToDeposit));

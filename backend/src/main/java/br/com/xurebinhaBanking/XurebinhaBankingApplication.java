@@ -31,6 +31,7 @@ public class XurebinhaBankingApplication {
                     break;
                 case 2:
                     accountService.actionAccount();
+                    FIM_SISTEMA = false;
                     break;
                 case 0:
                 default:
